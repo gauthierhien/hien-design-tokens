@@ -1,0 +1,35 @@
+---
+/**
+ * Paragraphe d'un SectionHeader, suivi du lien optionnel (souligné, comme
+ * « Learn more » sur apps.hien.design). Brique interne, non exportée.
+ */
+export interface Props {
+  body?: string | null;
+  href?: string | null;
+  label: string;
+  ariaLabel?: string | null;
+  target?: string | null;
+}
+
+const { body, href, label, ariaLabel, target } = Astro.props;
+---
+
+<p class="max-w-2xl">
+  {body}
+  {
+    href && (
+      <>
+        {body && " "}
+        <a
+          href={href}
+          target={target || undefined}
+          rel={target === "_blank" ? "noopener noreferrer" : undefined}
+          aria-label={ariaLabel || undefined}
+          class="hd-section-link whitespace-nowrap underline decoration-1 underline-offset-[0.2em] transition-opacity duration-200 hover:opacity-60"
+        >
+          {label}
+        </a>
+      </>
+    )
+  }
+</p>

@@ -205,7 +205,7 @@ from each site's Keystatic). The rest is guidance: component CSS lives in each a
 - **Tag** — Mono uppercase; `foreground` on `background`.
 - **Header**: tagline (mono, top left) and logo (top right). No navigation.
 - **Footer**: `.theme-dark` band on a mesh shader, availability LED line (hidden when unavailable), H2, rounded CTA, credit with Paris time, links between sites.
-- **Button / Tag / ImageWide / ImageSquare / Section* / Carousel / Lightbox / MeshBackground**: shared Astro components (see README). Sections compose a SectionHeader (tag, heading, body, all optional) with images; images carry an optional caption (mono) and link (↗). The mesh background is the brand's motion signature, in two tones: dark (black, low-opacity light shapes, grain) and light (page background and accent greyed by a saturation veil, grain). Both turn rainbow only while their trigger is hovered or focused.
+- **Button / Tag / ImageWide / ImageSquare / Section* / Carousel / Lightbox / MeshBackground**: shared Astro components (see README). Sections compose a SectionHeader (tag, heading, body, all optional, plus an optional underlined "Learn more" link to a detail page right after the body, as on apps.hien.design) with images; images carry an optional caption (mono) and link (↗). The mesh background is the brand's motion signature, in two tones: dark (black, low-opacity light shapes, grain) and light (page background and accent greyed by a saturation veil, grain). Both turn rainbow only while their trigger is hovered or focused.
 - Do not bake page modules (homepage Modules, Skills) into the brand: those stay app patterns.
 
 ## Do's and Don'ts

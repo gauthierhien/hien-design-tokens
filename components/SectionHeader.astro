@@ -6,20 +6,43 @@
  *
  * bleed : la section parente n'a pas de marge latérale (carrousel) ; la
  * grille se cale alors sur toute la largeur et garde 16px sur mobile.
+ *
+ * link : lien souligné à la suite du paragraphe (« Learn more » par défaut),
+ * vers la page détail d'un projet ou d'une app, comme sur apps.hien.design.
+ * Sans link, le rendu ne change pas.
  */
 import Tag from "./Tag.astro";
+import SectionText from "./SectionText.astro";
+
+export interface SectionLink {
+  href?: string | null;
+  /** Défaut : « Learn more ». */
+  label?: string | null;
+  /** Texte lu par les lecteurs d'écran, ex. « Learn more about Chanel ». */
+  ariaLabel?: string | null;
+  target?: string | null;
+}
 
 export interface Props {
   tag?: string | null;
   heading?: string | null;
   body?: string | null;
   bleed?: boolean;
+  link?: SectionLink | null;
   class?: string;
 }
 
-const { tag, heading, body, bleed = false, class: extraClass } = Astro.props;
+const { tag, heading, body, bleed = false, link, class: extraClass } = Astro.props;
 const hasAside = Astro.slots.has("aside");
-const show = tag || heading || body || hasAside;
+const textProps = {
+  body,
+  href: link?.href || null,
+  label: link?.label || "Learn more",
+  ariaLabel: link?.ariaLabel,
+  target: link?.target,
+};
+const text = body || textProps.href;
+const show = tag || heading || text || hasAside;
 ---
 
 {
@@ -36,11 +59,11 @@ const show = tag || heading || body || hasAside;
         {heading && <h2>{heading}</h2>}
         {hasAside ? (
           <div class="flex items-end justify-between gap-4">
-            {body ? <p class="max-w-2xl">{body}</p> : <span />}
+            {text ? <SectionText {...textProps} /> : <span />}
             <slot name="aside" />
           </div>
         ) : (
-          body && <p class="max-w-2xl">{body}</p>
+          text && <SectionText {...textProps} />
         )}
       </div>
     </div>
