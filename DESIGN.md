@@ -104,6 +104,12 @@ components:
     textColor: "{colors.foreground}"
     rounded: "{rounded.full}"
     padding: 12px 24px
+  button-outline:
+    backgroundColor: transparent
+    textColor: "{colors.foreground}"
+    borderColor: "{colors.border}"
+    borderColorHover: "{colors.foreground}"
+    rounded: "{rounded.full}"
   tag:
     backgroundColor: "{colors.foreground}"
     textColor: "{colors.background}"
@@ -195,6 +201,7 @@ from each site's Keystatic). The rest is guidance: component CSS lives in each a
 
 - **Primary button** — `foreground` fill on `background` text; hover via opacity.
 - **Secondary button** — `background-muted` fill.
+- **Outline button** (large pill CTA: Full resume, Get in touch, Download): transparent fill, `border` hairline at rest; hover or keyboard focus strengthens the border to `foreground`. The opacity never changes. Over an image or a dark surface, text and border use `background`, the border at 40% at rest and 100% on hover. Implemented in plain CSS so it also works on touch-first devices (iPad).
 - **Tag** — Mono uppercase; `foreground` on `background`.
 - **Header**: tagline (mono, top left) and logo (top right). No navigation.
 - **Footer**: `.theme-dark` band on a mesh shader, availability LED line (hidden when unavailable), H2, rounded CTA, credit with Paris time, links between sites.

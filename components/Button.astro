@@ -53,11 +53,11 @@ const resolvedTarget = target;
 const classes = [
   compact
     ? "hd-button flex items-center gap-6 p-2 pl-6 bg-background-muted rounded-full"
-    : "hd-button flex w-full items-center justify-between rounded-full border p-4 transition-all duration-200",
+    : "hd-button flex w-full items-center justify-between rounded-full border p-4",
   !compact &&
     (overlay
-      ? "border-background/40 bg-transparent text-background hover:border-background"
-      : "border-border hover:border-foreground"),
+      ? "is-overlay border-background/40 bg-transparent text-background"
+      : "is-outline border-border"),
   inactive && "opacity-70 pointer-events-none",
   extraClass,
 ];
@@ -93,6 +93,28 @@ const Tag = inactive ? "div" : "a";
     <Icon size={iconSize} stroke-width={1} color={iconColor} />
   </span>
 </Tag>
+
+<style>
+  /* Survol : la bordure se renforce, l'opacité ne change jamais. En CSS
+     direct (pas hover: de Tailwind, limité à @media (hover: hover)) pour
+     que ça marche aussi sur iPad. Un bouton meshTrigger suit aussi l'état
+     actif du fond animé. */
+  .hd-button {
+    transition: border-color 0.3s ease;
+  }
+
+  .hd-button.is-outline:hover,
+  .hd-button.is-outline:focus-visible,
+  :global(.is-mesh-active) .hd-button.is-outline[data-mesh-trigger] {
+    border-color: var(--foreground);
+  }
+
+  .hd-button.is-overlay:hover,
+  .hd-button.is-overlay:focus-visible,
+  :global(.is-mesh-active) .hd-button.is-overlay[data-mesh-trigger] {
+    border-color: var(--background);
+  }
+</style>
 
 <script>
   function bindHoverLabels() {

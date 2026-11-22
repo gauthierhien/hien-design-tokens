@@ -55,17 +55,18 @@ function readToken(name: string): Rgba {
   return raw ? cssColor(raw) : WHITE;
 }
 
-// Clair : fond de page et accent (désaturés au repos par un voile CSS).
+// Clair : fond de page et formes grises, sans accent, pour qu'aucun jaune
+// n'apparaisse pendant la transition vers l'arc-en-ciel.
 function lightRest(): Rgba[] {
   const background = readToken("--background");
-  const accent = readToken("--accent");
+  const shape = cssColor("oklch(0.86 0 0)");
   return [
     background,
     background,
-    mixColor(background, accent, 0.35),
-    accent,
+    mixColor(background, shape, 0.35),
+    shape,
     background,
-    mixColor(background, accent, 0.62),
+    mixColor(background, shape, 0.62),
     background,
   ];
 }
@@ -73,7 +74,8 @@ function lightRest(): Rgba[] {
 function lightRainbow(): Rgba[] {
   const background = readToken("--background");
   const hue = (h: number) => cssColor(`oklch(0.84 0.14 ${h})`);
-  return [background, background, hue(28), hue(125), background, hue(210), hue(320)];
+  // Pas de teinte entre 80 et 130 : elle tire au jaune en clair.
+  return [background, background, hue(28), hue(155), background, hue(230), hue(320)];
 }
 
 // Trois départs décalés, pour que des cartes voisines ne pulsent pas ensemble.
