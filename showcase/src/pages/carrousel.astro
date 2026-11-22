@@ -28,6 +28,19 @@ import app2 from "../assets/app-2.png";
       ]}
     />
   </Demo>
+  <Demo
+    label="Carousel · avec lien vers la page détail"
+    bleed
+    code={`<Carousel tag="…" heading="…" body="…" link={{ href: "/app/countdowns" }} items={[…]} />`}
+  >
+    <Carousel
+      tag="Side-projects"
+      heading="Countdowns"
+      body="Le lien suit le texte, les flèches restent à droite."
+      link={{ href: "#" }}
+      items={[{ image: app1, title: "Countdowns" }, { image: app2 }, { image: app1 }]}
+    />
+  </Demo>
   <Demo label="Carousel · sans en-tête" bleed code={`<Carousel items={[…]} />`}>
     <Carousel items={[{ image: app2 }, { image: app1 }, { image: app2 }]} />
   </Demo>

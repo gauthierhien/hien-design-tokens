@@ -10,7 +10,7 @@
 import { ChevronLeft, ChevronRight } from "@lucide/astro";
 import type { ImageMetadata } from "astro";
 import "swiper/css";
-import SectionHeader from "./SectionHeader.astro";
+import SectionHeader, { type SectionLink } from "./SectionHeader.astro";
 import ImageWide from "./ImageWide.astro";
 
 export interface CarouselItem {
@@ -25,10 +25,12 @@ export interface Props {
   tag?: string | null;
   heading?: string | null;
   body?: string | null;
+  /** Lien « Learn more » après le texte (page détail). */
+  link?: SectionLink | null;
   class?: string;
 }
 
-const { items: rawItems, tag, heading, body, class: extraClass } = Astro.props;
+const { items: rawItems, tag, heading, body, link, class: extraClass } = Astro.props;
 const items =
   rawItems?.filter(
     (item): item is CarouselItem & { image: ImageMetadata } =>
@@ -42,7 +44,7 @@ const items =
     extraClass,
   ]}
 >
-  <SectionHeader tag={tag} heading={heading} body={body} bleed>
+  <SectionHeader tag={tag} heading={heading} body={body} link={link} bleed>
     {
       items.length >= 2 && (
         <div slot="aside" class="hidden md:flex items-center gap-2 shrink-0">

@@ -18,17 +18,30 @@ import hero from "../assets/hero.jpg";
       <SectionHeader tag="Currently" heading="I help Sonepar build an AI-native product experience" body="Chaque partie est optionnelle." />
     </div>
   </Demo>
+  <Demo label="SectionHeader · lien vers la page détail" bleed code={`<SectionHeader tag="Previously" heading="…" body="…"
+  link={{ href: "/chanel", ariaLabel: "Learn more about Chanel" }} />`}>
+    <div class="px-4">
+      <SectionHeader tag="Previously" heading="I crafted interfaces at Chanel" body="Le lien suit le texte, souligné, « Learn more » par défaut (label pour le changer)." link={{ href: "#", ariaLabel: "Learn more about Chanel" }} />
+    </div>
+  </Demo>
   <Demo label="SectionImageWide · image large, en-tête dessous (Module A)" bleed code={`<SectionImageWide image={img} tag="Currently" heading="…" body="…" />`}>
     <SectionImageWide image={hero} tag="Currently" heading="I help Sonepar build an AI-native product experience" body="L'en-tête s'affiche seulement s'il est renseigné." />
   </Demo>
   <Demo label="SectionImageWide · en-tête dessus, image entière (contain), légende" bleed code={`<SectionImageWide image={img} fit="contain" heading="Picky" headerPosition="before" caption="…" />`}>
     <SectionImageWide image={app2} fit="contain" heading="Picky" headerPosition="before" caption="Color picker pour Mac" />
   </Demo>
+  <Demo label="SectionImageWide · avec lien vers la page détail" bleed code={`<SectionImageWide image={img} tag="Currently" heading="…" link={{ href: "/sonepar" }} />`}>
+    <SectionImageWide image={hero} tag="Currently" heading="I help Sonepar build an AI-native product experience" link={{ href: "#" }} />
+  </Demo>
   <Demo label="SectionImageWide · sans titre" bleed code={`<SectionImageWide image={img} />`}>
     <SectionImageWide image={hero} />
   </Demo>
   <Demo label="SectionImageGrid · plusieurs images carrées, visionneuse au clic (Module B)" bleed code={`<SectionImageGrid tag="…" heading="…" body="…" items={[img1, img2]} lightbox />`}>
     <SectionImageGrid tag="Side-projects" heading="Images carrées" body="Une image seule passe en image large." items={[app1, app2]} lightbox />
+  </Demo>
+  <Demo label="SectionImageGrid · avec lien vers la page détail (Module B)" bleed code={`<SectionImageGrid tag="…" heading="…" body="…" items={[img1, img2]} lightbox
+  link={{ href: "/chanel", label: "See the project" }} />`}>
+    <SectionImageGrid tag="Previously" heading="I crafted interfaces at Chanel" body="Le libellé du lien se change avec label." items={[app2, app1]} lightbox link={{ href: "#", label: "See the project" }} />
   </Demo>
   <Demo label="SectionImageGrid · une seule image, sans titre" bleed code={`<SectionImageGrid items={[img]} />`}>
     <SectionImageGrid items={[app1]} />
