@@ -4,9 +4,9 @@ import Demo from "../components/Demo.astro";
 import Tag from "@hien/design-tokens/Tag.astro";
 ---
 
-<Docs title="Badges" lead="Mono en capitales, encre pleine. Marge basse de 1rem par défaut, au-dessus d'un titre.">
+<Docs title="Badges" lead="Uppercase mono on solid ink. 1rem bottom margin by default, above a heading.">
   <Demo label="Tag" code={`<Tag>Side-projects</Tag>
-<Tag class="mb-0">About</Tag>   <!-- sans marge basse -->`}>
+<Tag class="mb-0">About</Tag>   <!-- no bottom margin -->`}>
     <div class="flex flex-wrap gap-2">
       <Tag class="mb-0">Side-projects</Tag>
       <Tag class="mb-0">About</Tag>
@@ -14,7 +14,7 @@ import Tag from "@hien/design-tokens/Tag.astro";
       <Tag class="mb-0">Currently</Tag>
     </div>
   </Demo>
-  <Demo label="Au-dessus d'un titre">
+  <Demo label="Above a heading">
     <Tag>Side-projects</Tag>
     <h2 class="mb-0">In my spare time, I have fun building my own ideas</h2>
   </Demo>

@@ -6,25 +6,25 @@ import Button from "@hien/design-tokens/Button.astro";
 ---
 
 <Docs
-  title="Fond animé"
-  lead="Le mesh (@paper-design/shaders) avec un grain, en deux tons. Au survol ou au focus d'un déclencheur, les formes passent à l'arc-en-ciel. Animé sur desktop, figé sur mobile et en reduced motion."
+  title="Animated background"
+  lead="The mesh (@paper-design/shaders) with grain, in two tones. When a trigger is hovered or focused, the shapes turn rainbow. Animated on desktop, frozen on mobile and with reduced motion."
 >
   <Demo
-    label="MeshBackground · sombre (footer, fond fixé d'apps), réagit au bouton"
+    label="MeshBackground · dark (footer, fixed background on apps), reacts to the button"
     code={`<div class="relative theme-dark" data-mesh-root>
-  <MeshBackground />            <!-- fixed : couvre le viewport -->
+  <MeshBackground />            <!-- fixed: covers the viewport -->
   <Button label="…" href="…" meshTrigger />
 </div>`}
   >
     <div class="relative aspect-video overflow-hidden theme-dark text-foreground" data-mesh-root>
       <MeshBackground />
       <div class="relative z-10 h-full flex items-center justify-center p-4 md:p-16">
-        <Button href="https://apps.hien.design" label="Survole-moi" meshTrigger />
+        <Button href="https://apps.hien.design" label="Hover me" meshTrigger />
       </div>
     </div>
   </Demo>
   <Demo
-    label={'MeshBackground tone="light" · clair (cartes Skills du CV), réagit au bouton'}
+    label={'MeshBackground tone="light" · light, reacts to the button'}
     code={`<div class="relative" data-mesh-root>
   <MeshBackground tone="light" pose={0} />
   <Button label="…" href="…" meshTrigger />
@@ -33,7 +33,7 @@ import Button from "@hien/design-tokens/Button.astro";
     <div class="relative aspect-video overflow-hidden" data-mesh-root>
       <MeshBackground tone="light" />
       <div class="relative z-10 h-full flex items-center justify-center p-4 md:p-16">
-        <Button href="https://cv.hien.design" label="Survole-moi" meshTrigger />
+        <Button href="https://cv.hien.design" label="Hover me" meshTrigger />
       </div>
     </div>
   </Demo>

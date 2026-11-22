@@ -71,7 +71,7 @@ Le Footer utilise `MeshBackground` et `Button` ; `meshFixed` fixe son fond au vi
 
 ## Vitrine
 
-`showcase/` est un site Astro statique (https://tokens.hien.design, non référencé), organisé comme une doc : navigation à gauche (Fondations : couleurs, typographie, grille, fond animé ; Composants : Header et Footer, boutons, badges, images, sections, carrousel), une page par sujet avec exemples et code d'usage, sélecteur Clair / Sombre / Système. Pour ajouter une page : un fichier dans `showcase/src/pages/` et une entrée dans `showcase/src/nav.ts`.
+`showcase/` est un site Astro statique en anglais (US) (https://tokens.hien.design, non référencé), organisé comme une doc : navigation à gauche (Foundations : colors, typography, grid, animated background ; Components : Header and Footer, buttons, badges, images, sections, carousel), une page par sujet avec exemples et code d’usage, sélecteur System / Light / Dark. Les anciennes adresses en français redirigent vers les nouvelles. Pour ajouter une page : un fichier dans `showcase/src/pages/` et une entrée dans `showcase/src/nav.ts`.
 
 ```bash
 cd showcase && pnpm install && pnpm dev   # http://localhost:4330

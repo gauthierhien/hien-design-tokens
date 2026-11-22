@@ -10,31 +10,31 @@ import MeshBackground from "@hien/design-tokens/MeshBackground.astro";
 <Docs
   title="hien.design.tokens"
   logoTitle
-  lead="Les tokens, la grille et les composants partagés par hien.design, feed, cv et apps. Le squelette vit ici, le contenu de chaque site vit dans son Keystatic."
+  lead="The tokens, grid and components shared by hien.design, feed, cv and apps. The skeleton lives here; each site's content lives in its own Keystatic."
 >
   <section class="grid grid-cols-1 md:grid-cols-2 border-b border-border">
-    <a href="/couleurs" class="group flex flex-col gap-6 p-4 md:p-8 border-b border-border md:border-r hover:bg-background-muted">
+    <a href="/colors" class="group flex flex-col gap-6 p-4 md:p-8 border-b border-border md:border-r hover:bg-background-muted">
       <div class="flex gap-2 h-32 items-end">
         {colors.map((c) => (
           <span class="flex-1 h-full rounded-full border border-border" style={`background: ${light[c.token]}`}></span>
         ))}
       </div>
-      <div><p><strong>Couleurs</strong></p><p class="text-muted">Tokens oklch, mode clair et mode sombre.</p></div>
+      <div><p><strong>Colors</strong></p><p class="text-muted">oklch tokens, light and dark mode.</p></div>
     </a>
-    <a href="/typographie" class="group flex flex-col gap-6 p-4 md:p-8 border-b border-border hover:bg-background-muted">
+    <a href="/typography" class="group flex flex-col gap-6 p-4 md:p-8 border-b border-border hover:bg-background-muted">
       <div class="grid grid-cols-2 h-32 border border-dashed border-border">
         <span class="flex items-center justify-center font-sans text-h3 font-medium border-r border-dashed border-border">Geist</span>
         <span class="flex items-center justify-center font-mono text-h4">Mono</span>
       </div>
-      <div><p><strong>Typographie</strong></p><p class="text-muted">Geist et Geist Mono, échelle responsive.</p></div>
+      <div><p><strong>Typography</strong></p><p class="text-muted">Geist and Geist Mono, responsive scale.</p></div>
     </a>
-    <a href="/fond-anime" class="group flex flex-col gap-6 p-4 md:p-8 border-b md:border-b-0 border-border md:border-r hover:bg-background-muted">
+    <a href="/animated-background" class="group flex flex-col gap-6 p-4 md:p-8 border-b md:border-b-0 border-border md:border-r hover:bg-background-muted">
       <div class="relative h-32 overflow-hidden theme-dark" data-mesh-root data-mesh-trigger>
         <MeshBackground />
       </div>
-      <div><p><strong>Fond animé</strong></p><p class="text-muted">Mesh sombre et clair, état coloré au survol.</p></div>
+      <div><p><strong>Animated background</strong></p><p class="text-muted">Dark and light mesh, colored state on hover.</p></div>
     </a>
-    <a href="/boutons" class="group flex flex-col gap-6 p-4 md:p-8 hover:bg-background-muted">
+    <a href="/buttons" class="group flex flex-col gap-6 p-4 md:p-8 hover:bg-background-muted">
       <div class="h-32 flex flex-col justify-center gap-3">
         <div class="flex gap-2"><Tag class="mb-0">Side-projects</Tag><Tag class="mb-0">About</Tag></div>
         <div class="flex items-center justify-between rounded-full border border-border p-2 pl-6">
@@ -42,7 +42,7 @@ import MeshBackground from "@hien/design-tokens/MeshBackground.astro";
           <span class="w-10 h-10 rounded-full bg-foreground"></span>
         </div>
       </div>
-      <div><p><strong>Composants</strong></p><p class="text-muted">Header, Footer, boutons, images, sections, carrousel.</p></div>
+      <div><p><strong>Components</strong></p><p class="text-muted">Header, Footer, buttons, images, sections, carousel.</p></div>
     </a>
   </section>
 

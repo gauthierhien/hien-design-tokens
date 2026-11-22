@@ -3,14 +3,14 @@ import Docs from "../layouts/Docs.astro";
 ---
 
 <Docs
-  title="Grille"
-  lead="La même grille sur hien.design, feed, cv et apps : pleine largeur avec 16px de marge sous md, puis 8 colonnes sans gouttière. Le contenu occupe les colonnes 2 à 7, puis 3 à 6 dès 2xl."
+  title="Grid"
+  lead="The same grid on hien.design, feed, cv and apps: full width with a 16px margin below md, then 8 columns with no gutter. Content spans columns 2 to 7, then 3 to 6 from 2xl."
 >
   <section class="px-4 md:px-8 py-8 border-b border-border bg-background-muted flex flex-col gap-3">
     <span class="text-muted">
-      <span class="md:hidden">sm · moins de 768px · 1 colonne</span>
-      <span class="hidden md:inline 2xl:hidden">md à xl · 768 à 1535px · contenu 2 à 7</span>
-      <span class="hidden 2xl:inline">2xl · 1536px et plus · contenu 3 à 6</span>
+      <span class="md:hidden">sm · under 768px · 1 column</span>
+      <span class="hidden md:inline 2xl:hidden">md to xl · 768 to 1535px · content 2 to 7</span>
+      <span class="hidden 2xl:inline">2xl · 1536px and up · content 3 to 6</span>
     </span>
     <div class="relative">
       <div class="hidden md:grid grid-cols-8 absolute inset-0" aria-hidden="true">
@@ -32,10 +32,10 @@ import Docs from "../layouts/Docs.astro";
   <ul class="border-b border-border divide-y divide-border">
     {
       [
-        ["Sous 768px", "Une colonne, 16px de marge (px-4)."],
-        ["768 à 1535px", "8 colonnes, contenu en colonnes 2 à 7 (6 sur 8)."],
-        ["1536px et plus", "8 colonnes, contenu en colonnes 3 à 6 (4 sur 8)."],
-        ["Modules", "En-têtes de section sur 6 colonnes dès md (4 au centre), 8 en 2xl."],
+        ["Under 768px", "One column, 16px margin (px-4)."],
+        ["768 to 1535px", "8 columns, content in columns 2 to 7 (6 of 8)."],
+        ["1536px and up", "8 columns, content in columns 3 to 6 (4 of 8)."],
+        ["Modules", "Section headers on 6 columns from md (the middle 4), 8 at 2xl."],
       ].map(([k, v]) => (
         <li class="grid grid-cols-[25%_1fr] md:grid-cols-8 gap-4 px-4 md:px-8 py-6">
           <span class="text-muted md:col-span-2">{k}</span>

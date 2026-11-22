@@ -4,35 +4,35 @@ import { colors, light, dark } from "../data";
 ---
 
 <Docs
-  title="Couleurs"
-  lead={'Toutes les couleurs sont en oklch. Le mode sombre s\'active avec data-theme="dark" (ou "auto" pour suivre le système) sur html : les sites restent en clair tant qu\'ils ne le demandent pas. En sombre, le fond de page est noir pur.'}
+  title="Colors"
+  lead={'Every color is in oklch. Dark mode is turned on with data-theme="dark" (or "auto" to follow the system) on html: sites stay light until they ask for it. In dark mode, the page background is pure black.'}
 >
   <ul class="w-full border-b border-border divide-y divide-border">
     <li class="hidden md:grid grid-cols-8 gap-4 py-4 px-4 md:px-8 text-muted">
-      <span class="col-span-1">Aperçu</span>
+      <span class="col-span-1">Preview</span>
       <span class="col-start-2 col-span-3">Token</span>
-      <span class="col-start-5 col-span-2">Clair</span>
-      <span class="col-start-7 col-span-2">Sombre</span>
+      <span class="col-start-5 col-span-2">Light</span>
+      <span class="col-start-7 col-span-2">Dark</span>
     </li>
     {
       colors.map((c) => (
         <li class="grid grid-cols-[25%_1fr] items-center gap-2 py-4 px-4 md:px-8 md:grid-cols-8 md:gap-4 md:py-8">
           <div class="flex gap-1 md:col-start-1 md:col-span-1 md:row-start-1">
-            <span class="w-8 h-8 md:w-10 md:h-10 border border-[oklch(80%_0_0/0.5)] shrink-0" style={`background: ${light[c.token]}`} title="Clair" />
-            <span class="w-8 h-8 md:w-10 md:h-10 border border-[oklch(80%_0_0/0.5)] shrink-0" style={`background: ${dark[c.token]}`} title="Sombre" />
+            <span class="w-8 h-8 md:w-10 md:h-10 border border-[oklch(80%_0_0/0.5)] shrink-0" style={`background: ${light[c.token]}`} title="Light" />
+            <span class="w-8 h-8 md:w-10 md:h-10 border border-[oklch(80%_0_0/0.5)] shrink-0" style={`background: ${dark[c.token]}`} title="Dark" />
           </div>
           <div class="md:col-start-2 md:col-span-3">
             <p>{c.token}</p>
             <p class="text-muted">{c.note}</p>
           </div>
           <p class="col-start-2 md:col-start-5 md:col-span-2 font-mono text-sm font-light leading-relaxed">
-            <span class="md:hidden text-muted">Clair · </span>
+            <span class="md:hidden text-muted">Light · </span>
             {light[c.token]}
             <br />
             <span class="text-muted">{c.utility}</span>
           </p>
           <p class="col-start-2 md:col-start-7 md:col-span-2 font-mono text-sm font-light leading-relaxed">
-            <span class="md:hidden text-muted">Sombre · </span>
+            <span class="md:hidden text-muted">Dark · </span>
             {dark[c.token]}
           </p>
         </li>
@@ -44,11 +44,11 @@ import { colors, light, dark } from "../data";
     <pre class="bg-background-muted p-4 overflow-x-auto font-mono text-xs leading-relaxed"><code>{`<div class="bg-background text-foreground border-border">…</div>
 <span class="bg-status">…</span>
 
-<!-- Mode sombre, opt-in -->
-<html data-theme="dark">   <!-- ou "auto" -->
+<!-- Dark mode, opt-in -->
+<html data-theme="dark">   <!-- or "auto" -->
 <p class="text-foreground dark:text-accent">…</p>
 
-<!-- Surface inversée locale (bande du footer) -->
+<!-- Local inverted surface (footer band) -->
 <section class="theme-dark bg-background text-foreground">…</section>`}</code></pre>
   </section>
 </Docs>

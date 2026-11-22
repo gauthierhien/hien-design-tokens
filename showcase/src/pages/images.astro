@@ -12,18 +12,18 @@ import hero from "../assets/hero.jpg";
 
 <Docs
   title="Images"
-  lead="Image large et image carrée : fond gris, image entière avec de l'air autour (contain) ou qui remplit le cadre (cover). Légende et lien optionnels, ou ouverture de la visionneuse."
+  lead="Wide image and square image: grey background, the whole image with room around it (contain) or filling the frame (cover). Optional caption and link, or opening the lightbox."
 >
-  <Demo label="ImageWide · carrée sur mobile, 16:9 dès md, sans légende" code={`<ImageWide image={img} alt="…" />`}>
-    <ImageWide image={app1} alt="Capture d'app" />
+  <Demo label="ImageWide · square on mobile, 16:9 from md, no caption" code={`<ImageWide image={img} alt="…" />`}>
+    <ImageWide image={app1} alt="App screenshot" />
   </Demo>
-  <Demo label="ImageWide · légende et lien (flèche ↗, nouvel onglet)" code={`<ImageWide image={img} caption="Picky" href="https://…" padding="3rem" />`}>
+  <Demo label="ImageWide · caption and link (↗ arrow, new tab)" code={`<ImageWide image={img} caption="Picky" href="https://…" padding="3rem" />`}>
     <ImageWide image={app2} alt="Picky" caption="Picky" href="https://apps.hien.design" padding="3rem" />
   </Demo>
-  <Demo label="ImageWide · cover, 16:9 partout, légende sans lien" code={`<ImageWide image={img} fit="cover" responsive={false} caption="…" />`}>
-    <ImageWide image={hero} alt="" fit="cover" responsive={false} caption="Sonepar, assistant vocal" />
+  <Demo label="ImageWide · cover, 16:9 everywhere, caption without a link" code={`<ImageWide image={img} fit="cover" responsive={false} caption="…" />`}>
+    <ImageWide image={hero} alt="" fit="cover" responsive={false} caption="Sonepar, voice assistant" />
   </Demo>
-  <Demo label="ImageSquare · sans légende, avec légende, avec légende et lien" code={`<ImageSquare image={img} caption="Countdowns" href="https://…" />`}>
+  <Demo label="ImageSquare · no caption, caption, caption and link" code={`<ImageSquare image={img} caption="Countdowns" href="https://…" />`}>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-1">
       <ImageSquare image={app1} alt="Countdowns" />
       <ImageSquare image={app2} alt="Picky" caption="Picky" />
@@ -31,7 +31,7 @@ import hero from "../assets/hero.jpg";
     </div>
   </Demo>
   <Demo
-    label="Visionneuse · un clic sur l'image ouvre la Lightbox (Échap ferme)"
+    label="Lightbox · clicking the image opens it (Esc closes)"
     code={`<ImageSquare image={img} lightbox={{ id: "demo", index: 0 }} />
 <Lightbox id="demo" images={[{ src: img, alt: "…" }]} />`}
   >
@@ -41,10 +41,10 @@ import hero from "../assets/hero.jpg";
     </div>
     <Lightbox id="images-demo" images={[{ src: app1, alt: "Countdowns" }, { src: app2, alt: "Picky" }]} />
   </Demo>
-  <Demo label="Thumbnail · la vignette de base, sans légende ni lien" code={`<Thumbnail image={img} alt="…" aspect="square" />`}>
+  <Demo label="Thumbnail · the base tile, no caption or link" code={`<Thumbnail image={img} alt="…" aspect="square" />`}>
     <div class="grid grid-cols-2 gap-1">
-      <Thumbnail image={app1} alt="Capture d'app" />
-      <Thumbnail image={app2} alt="Capture d'app" />
+      <Thumbnail image={app1} alt="App screenshot" />
+      <Thumbnail image={app2} alt="App screenshot" />
     </div>
   </Demo>
 </Docs>

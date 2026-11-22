@@ -6,17 +6,17 @@ import { Image } from "astro:assets";
 import hero from "../assets/hero.jpg";
 ---
 
-<Docs title="Boutons" lead="La pilule pleine largeur de Full resume, Get in touch et Download on the App Store, et sa version compacte.">
-  <Demo label="outline, md (défaut)" code={`<Button href="https://cv.hien.design" label="Full resume" />`}>
+<Docs title="Buttons" lead="The full-width pill behind Full resume, Get in touch and Download on the App Store, and its compact version.">
+  <Demo label="outline, md (default)" code={`<Button href="https://cv.hien.design" label="Full resume" />`}>
     <Button href="https://cv.hien.design" label="Full resume" />
   </Demo>
-  <Demo label="outline, lg, libellé au survol (footer)" code={`<Button href="mailto:…" label="Get in touch" hoverLabel="gauthier@hien.design" size="lg" />`}>
+  <Demo label="outline, lg, label swap on hover (footer)" code={`<Button href="mailto:…" label="Get in touch" hoverLabel="gauthier@hien.design" size="lg" />`}>
     <Button href="mailto:gauthier@hien.design" label="Get in touch" hoverLabel="gauthier@hien.design" size="lg" />
   </Demo>
-  <Demo label="inactif (sans lien)" code={`<Button label="Soon" />`}>
+  <Demo label="disabled (no link)" code={`<Button label="Soon" />`}>
     <Button label="Soon" />
   </Demo>
-  <Demo label="overlay, sur une image" code={`<Button href="…" label="Download on the App Store" variant="overlay" target="_blank" />`}>
+  <Demo label="overlay, on an image" code={`<Button href="…" label="Download on the App Store" variant="overlay" target="_blank" />`}>
     <div class="relative aspect-video overflow-hidden border border-border">
       <Image src={hero} alt="" class="absolute inset-0 w-full h-full object-cover" />
       <div class="absolute inset-0 flex items-center justify-center p-4 md:p-16">
@@ -24,7 +24,7 @@ import hero from "../assets/hero.jpg";
       </div>
     </div>
   </Demo>
-  <Demo label="compact, icône plus (grilles d'images du portfolio)" code={`<Button href="…" label="See all projects" variant="compact" icon="plus" />`}>
+  <Demo label="compact, plus icon (portfolio image grids)" code={`<Button href="…" label="See all projects" variant="compact" icon="plus" />`}>
     <Button href="https://feed.hien.design" label="See all projects" variant="compact" icon="plus" />
   </Demo>
 </Docs>
