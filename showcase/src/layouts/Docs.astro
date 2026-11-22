@@ -8,7 +8,7 @@ import { nav, pages } from "../nav";
 export interface Props {
   title: string;
   lead?: string;
-  /** Affiche le logo manuscrit « gauthier h. » à la place du titre. */
+  /** Shows the handwritten "gauthier h." logo instead of the title. */
   logoTitle?: boolean;
 }
 
@@ -19,14 +19,14 @@ const index = pages.findIndex((page) => isActive(page.href));
 const prev = index > 0 ? pages[index - 1] : null;
 const next = index >= 0 && index < pages.length - 1 ? pages[index + 1] : null;
 const modes = [
-  ["auto", "Système"],
-  ["light", "Clair"],
-  ["dark", "Sombre"],
+  ["auto", "System"],
+  ["light", "Light"],
+  ["dark", "Dark"],
 ];
 ---
 
 <!doctype html>
-<html lang="fr">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
@@ -147,7 +147,7 @@ const modes = [
           {
             prev ? (
               <a href={prev.href} class="p-4 md:p-8 border-r border-border hover:bg-background-muted">
-                <span class="text-muted">Précédent</span>
+                <span class="text-muted">Previous</span>
                 <p>{prev.label}</p>
               </a>
             ) : (
@@ -157,7 +157,7 @@ const modes = [
           {
             next && (
               <a href={next.href} class="p-4 md:p-8 text-right hover:bg-background-muted">
-                <span class="text-muted">Suivant</span>
+                <span class="text-muted">Next</span>
                 <p>{next.label}</p>
               </a>
             )
@@ -184,7 +184,7 @@ const modes = [
             localStorage.setItem("hd-theme", b.dataset.themeSet ?? "auto");
           } catch {}
           sync();
-          // Les couleurs du mesh clair suivent le fond de page.
+          // The light mesh colors follow the page background.
           mountMesh();
         }),
       );

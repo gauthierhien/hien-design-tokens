@@ -7,11 +7,11 @@ import app2 from "../assets/app-2.png";
 ---
 
 <Docs
-  title="Carrousel"
-  lead="Swiper, en-tête avec flèches précédent et suivant dès md, slides en images larges qui débordent de la grille. Une slide sur deux est décalée en 2xl. Pensé pour la pleine largeur de page."
+  title="Carousel"
+  lead="Swiper, a header with previous and next arrows from md, wide-image slides that bleed past the grid. Every other slide is offset at 2xl. Built for full page width."
 >
   <Demo
-    label="Carousel · avec badge, titre et texte (Module C)"
+    label="Carousel · with tag, heading and text (Module C)"
     bleed
     code={`<Carousel tag="Side-projects" heading="…" body="…"
   items={[{ image, title: "Countdowns", link: "https://…" }, …]} />`}
@@ -29,19 +29,19 @@ import app2 from "../assets/app-2.png";
     />
   </Demo>
   <Demo
-    label="Carousel · avec lien vers la page détail"
+    label="Carousel · with a link to the detail page"
     bleed
     code={`<Carousel tag="…" heading="…" body="…" link={{ href: "/app/countdowns" }} items={[…]} />`}
   >
     <Carousel
       tag="Side-projects"
       heading="Countdowns"
-      body="Le lien suit le texte, les flèches restent à droite."
+      body="The link follows the text; the arrows stay on the right."
       link={{ href: "#" }}
       items={[{ image: app1, title: "Countdowns" }, { image: app2 }, { image: app1 }]}
     />
   </Demo>
-  <Demo label="Carousel · sans en-tête" bleed code={`<Carousel items={[…]} />`}>
+  <Demo label="Carousel · no header" bleed code={`<Carousel items={[…]} />`}>
     <Carousel items={[{ image: app2 }, { image: app1 }, { image: app2 }]} />
   </Demo>
 </Docs>

@@ -2,24 +2,24 @@ export type NavItem = { href: string; label: string; description: string };
 
 export const nav: { title: string; items: NavItem[] }[] = [
   {
-    title: "Fondations",
+    title: "Foundations",
     items: [
-      { href: "/", label: "Introduction", description: "Ce que contient le design system et comment l'utiliser." },
-      { href: "/couleurs", label: "Couleurs", description: "Tokens oklch, mode clair et mode sombre." },
-      { href: "/typographie", label: "Typographie", description: "Geist et Geist Mono, échelle responsive." },
-      { href: "/grille", label: "Grille", description: "8 colonnes, contenu centré, déclinaisons responsive." },
-      { href: "/fond-anime", label: "Fond animé", description: "Mesh sombre et clair, état coloré au survol." },
+      { href: "/", label: "Introduction", description: "What the design system contains and how to use it." },
+      { href: "/colors", label: "Colors", description: "oklch tokens, light and dark mode." },
+      { href: "/typography", label: "Typography", description: "Geist and Geist Mono, responsive scale." },
+      { href: "/grid", label: "Grid", description: "8 columns, centered content, responsive variants." },
+      { href: "/animated-background", label: "Animated background", description: "Dark and light mesh, colored state on hover." },
     ],
   },
   {
-    title: "Composants",
+    title: "Components",
     items: [
-      { href: "/header-footer", label: "Header et Footer", description: "Squelette commun, contenu depuis Keystatic." },
-      { href: "/boutons", label: "Boutons", description: "Pilule pleine largeur, overlay, compacte." },
-      { href: "/badges", label: "Badges", description: "Tag mono en capitales." },
-      { href: "/images", label: "Images", description: "Image large, image carrée, légende, lien, visionneuse." },
-      { href: "/sections", label: "Sections", description: "En-tête, image large, grille d'images." },
-      { href: "/carrousel", label: "Carrousel", description: "Slides qui débordent de la grille." },
+      { href: "/header-footer", label: "Header and Footer", description: "Shared skeleton, content from Keystatic." },
+      { href: "/buttons", label: "Buttons", description: "Full-width pill, overlay, compact." },
+      { href: "/badges", label: "Badges", description: "Uppercase mono tag." },
+      { href: "/images", label: "Images", description: "Wide image, square image, caption, link, lightbox." },
+      { href: "/sections", label: "Sections", description: "Header, wide image, image grid." },
+      { href: "/carousel", label: "Carousel", description: "Slides that bleed past the grid." },
     ],
   },
 ];

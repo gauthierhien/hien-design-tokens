@@ -2,7 +2,44 @@
   "headers": [
     {
       "source": "/(.*)",
-      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/couleurs",
+      "destination": "/colors",
+      "permanent": true
+    },
+    {
+      "source": "/typographie",
+      "destination": "/typography",
+      "permanent": true
+    },
+    {
+      "source": "/grille",
+      "destination": "/grid",
+      "permanent": true
+    },
+    {
+      "source": "/fond-anime",
+      "destination": "/animated-background",
+      "permanent": true
+    },
+    {
+      "source": "/boutons",
+      "destination": "/buttons",
+      "permanent": true
+    },
+    {
+      "source": "/carrousel",
+      "destination": "/carousel",
+      "permanent": true
     }
   ]
 }

@@ -6,11 +6,11 @@ import Footer from "@hien/design-tokens/Footer.astro";
 ---
 
 <Docs
-  title="Header et Footer"
-  lead="Le même squelette sur les quatre sites. Chaque site ne fait que lire son Keystatic (singletons Header et Footer, fournis par le package) et passer le contenu en props."
+  title="Header and Footer"
+  lead="The same skeleton on all four sites. Each site only reads its Keystatic (Header and Footer singletons, shipped by the package) and passes the content as props."
 >
   <Demo
-    label="Header · tagline et logo"
+    label="Header · tagline and logo"
     bleed
     code={`---
 import { getEntry } from "astro:content";
@@ -24,7 +24,7 @@ const header = await getEntry("header-data", "index");
     </div>
   </Demo>
   <Demo
-    label="Footer · hien.design, feed et cv (navigation entre les sites, heure de Paris)"
+    label="Footer · hien.design, feed and cv (navigation between sites, Paris time)"
     bleed
     code={`<Footer currentSite="feed" {...footer?.data} />`}
   >
@@ -42,12 +42,12 @@ const header = await getEntry("header-data", "index");
     <ul class="divide-y divide-border border-y border-border">
       {
         [
-          ["currentSite", "home, feed ou cv : lien du logo et navigation entre les sites."],
-          ["heading", "Un « ? » coupe le titre, la suite passe en gris sur une 2e ligne."],
-          ["ctaEmail, ctaHref", "Adresse du bouton ; le survol affiche l'adresse email."],
-          ["isAvailable", "Décoché : la ligne de disponibilité est masquée."],
-          ["showSiteNav, homeLink, externalInNewTab, showTime", "Structure de la navigation (apps : pas de navigation entre sites, lien Home, pas d'heure)."],
-          ["meshFixed", "Le fond animé couvre tout le viewport (apps)."],
+          ["currentSite", "home, feed or cv: logo link and navigation between sites."],
+          ["heading", "A \"?\" splits the heading; the rest goes grey on a second line."],
+          ["ctaEmail, ctaHref", "Button target; hovering shows the email address."],
+          ["isAvailable", "Unchecked: the availability line is hidden."],
+          ["showSiteNav, homeLink, externalInNewTab, showTime", "Navigation structure (apps: no navigation between sites, a Home link, no time)."],
+          ["meshFixed", "The animated background covers the whole viewport (apps)."],
         ].map(([k, v]) => (
           <li class="grid grid-cols-1 md:grid-cols-8 gap-2 md:gap-4 py-4">
             <span class="md:col-span-3">{k}</span>
