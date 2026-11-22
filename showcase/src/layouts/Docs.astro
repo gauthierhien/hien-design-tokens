@@ -8,9 +8,11 @@ import { nav, pages } from "../nav";
 export interface Props {
   title: string;
   lead?: string;
+  /** Affiche le logo manuscrit « gauthier h. » à la place du titre. */
+  logoTitle?: boolean;
 }
 
-const { title, lead } = Astro.props;
+const { title, lead, logoTitle = false } = Astro.props;
 const path = Astro.url.pathname.replace(/\/+$/, "") || "/";
 const isActive = (href: string) => (href === "/" ? path === "/" : path === href);
 const index = pages.findIndex((page) => isActive(page.href));
@@ -42,7 +44,7 @@ const modes = [
   <body class="min-h-screen">
     <header class="sticky top-0 z-40 h-16 flex items-stretch border-b border-border bg-background">
       <a href="/" class="flex items-center gap-3 px-4 md:w-64 md:shrink-0 md:border-r md:border-border">
-        <strong class="whitespace-nowrap">hien.design</strong>
+        <strong class="whitespace-nowrap">hien.design<em class="not-italic text-muted">.tokens</em></strong>
       </a>
       <div class="flex-1 flex items-center justify-end md:justify-between gap-4 px-4 md:px-8">
         <span class="hidden md:inline text-muted">@hien/design-tokens v{pkg.version}</span>
@@ -125,7 +127,19 @@ const modes = [
 
       <main class="flex-1 min-w-0">
         <div class="px-4 md:px-8 pt-12 pb-12 md:pt-20 md:pb-16 border-b border-border">
-          <h1>{title}</h1>
+          {
+            logoTitle ? (
+              <h1 class="mb-0">
+                <img
+                  src="/gauthier-hien-logo.svg"
+                  alt={title}
+                  class="w-64 md:w-80 lg:w-96 h-auto dark:invert"
+                />
+              </h1>
+            ) : (
+              <h1>{title}</h1>
+            )
+          }
           {lead && <p class="text-lead text-muted max-w-3xl mt-4">{lead}</p>}
         </div>
         <slot />
