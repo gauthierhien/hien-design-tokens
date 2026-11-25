@@ -57,8 +57,7 @@ function readToken(name: string): Rgba {
 
 // Clair : fond de page et formes grises, sans accent, pour qu'aucun jaune
 // n'apparaisse pendant la transition vers l'arc-en-ciel.
-function lightRest(): Rgba[] {
-  const background = readToken("--background");
+function lightRest(background = readToken("--background")): Rgba[] {
   const shape = cssColor("oklch(0.86 0 0)");
   return [
     background,
@@ -71,8 +70,7 @@ function lightRest(): Rgba[] {
   ];
 }
 
-function lightRainbow(): Rgba[] {
-  const background = readToken("--background");
+function lightRainbow(background = readToken("--background")): Rgba[] {
   const hue = (h: number) => cssColor(`oklch(0.84 0.14 ${h})`);
   // Pas de teinte entre 80 et 130 : elle tire au jaune en clair.
   return [background, background, hue(28), hue(155), background, hue(230), hue(320)];
@@ -100,6 +98,80 @@ function restColors(): Rgba[] {
 function rainbowColors(): Rgba[] {
   const hue = (h: number) => cssColor(`oklch(0.62 0.18 ${h})`);
   return [BLACK, hue(28), BLACK, hue(125), BLACK, hue(210), hue(320)];
+}
+
+// Rayon du halo, proportionnel au bloc.
+function spotRadius(host: HTMLElement) {
+  return Math.max(360, 0.9 * Math.min(host.offsetWidth, host.offsetHeight));
+}
+
+// Position du pointeur dans le calque, même si la racine est inclinée (cartes).
+function spotPoint(host: HTMLElement, root: HTMLElement | null, event: PointerEvent) {
+  const rect = host.getBoundingClientRect();
+  const matrix = new DOMMatrix(root ? getComputedStyle(root).transform : "none");
+  matrix.e = 0;
+  matrix.f = 0;
+  const local = matrix
+    .inverse()
+    .transformPoint(
+      new DOMPoint(
+        event.clientX - rect.left - rect.width / 2,
+        event.clientY - rect.top - rect.height / 2,
+      ),
+    );
+  return { x: local.x + host.offsetWidth / 2, y: local.y + host.offsetHeight / 2 };
+}
+
+const REVEAL_FADE_MS = 500;
+
+// reveal : calque arc-en-ciel découpé par le halo. rest : calque de repos, du
+// même shader. Hors survol le calque révélé est arrêté ; à l'entrée il reprend
+// l'instant du repos, pour que les formes coïncident.
+function bindSpotlight(
+  host: HTMLElement,
+  root: HTMLElement | null,
+  target: HTMLElement,
+  reveal: ShaderMount,
+  signal: AbortSignal,
+) {
+  const mask = host.closest<HTMLElement>(".mesh-reveal");
+  const rest = mask?.parentElement?.querySelector<PaperShaderElement>(
+    ":scope > .mesh-layer",
+  );
+  if (!mask) return;
+  let stopTimer = 0;
+  let on = false;
+
+  const off = () => {
+    if (!on) return;
+    on = false;
+    mask.classList.remove("is-spot");
+    stopTimer = window.setTimeout(() => reveal.setSpeed(0), REVEAL_FADE_MS);
+  };
+  const move = (event: PointerEvent) => {
+    const speed = desiredSpeed();
+    if (speed === 0) return off();
+    const { x, y } = spotPoint(host, root, event);
+    mask.style.setProperty("--spot-x", `${x}px`);
+    mask.style.setProperty("--spot-y", `${y}px`);
+    if (on && mask.classList.contains("is-spot")) return;
+    on = true;
+    window.clearTimeout(stopTimer);
+    mask.style.setProperty("--spot-r", `${spotRadius(host)}px`);
+    const frame = rest?.paperShaderMount?.getCurrentFrame();
+    if (frame !== undefined) reveal.setFrame(frame);
+    reveal.setSpeed(speed);
+    mask.classList.add("is-spot");
+  };
+  const opts = { signal, passive: true };
+  target.addEventListener("pointermove", move, opts);
+  target.addEventListener("pointerdown", move, opts);
+  target.addEventListener("pointerleave", off, opts);
+  target.addEventListener("pointercancel", off, opts);
+  signal.addEventListener("abort", () => {
+    off();
+    window.clearTimeout(stopTimer);
+  });
 }
 
 function easeInOut(t: number) {
@@ -131,9 +203,17 @@ function mountOne(host: HTMLElement) {
 
   const bg = host.closest<HTMLElement>(".mesh-bg");
   const tone: Tone = bg?.dataset.tone === "light" ? "light" : "dark";
+  const spotlight = bg?.dataset.effect === "spotlight";
   const pose = POSES[Number(bg?.dataset.pose ?? 0) % POSES.length] ?? POSES[0];
-  const rest = tone === "light" ? lightRest() : restColors();
-  const rainbow = tone === "light" ? lightRainbow() : rainbowColors();
+  const reveal = host.closest(".mesh-reveal") !== null;
+  // Le halo clair reste clair, quel que soit le thème de la page.
+  const paper = spotlight ? cssColor("oklch(98.5% 0 0)") : undefined;
+  const rainbow = tone === "light" ? lightRainbow(paper) : rainbowColors();
+  const rest = reveal
+    ? rainbow
+    : tone === "light"
+      ? lightRest(paper)
+      : restColors();
   let mount: ShaderMount;
   try {
     mount = new ShaderMount(
@@ -157,7 +237,7 @@ function mountOne(host: HTMLElement) {
         u_grainOverlay: 0,
       },
       { alpha: false, antialias: false, powerPreference: "low-power" },
-      desiredSpeed(),
+      reveal ? 0 : desiredSpeed(),
       pose.frame,
       2,
       720 * 1000,
@@ -174,15 +254,23 @@ function mountOne(host: HTMLElement) {
   // [data-mesh-root] (le footer), ou de toute la page s'il est fixé au
   // viewport (un bouton du hero peut alors le déclencher aussi).
   const root = host.closest<HTMLElement>("[data-mesh-root]");
-  const scope: ParentNode = host.closest(".mesh-bg.is-fixed")
-    ? document
-    : (root ?? document);
-  const triggers = Array.from(
-    scope.querySelectorAll<HTMLElement>("[data-mesh-trigger]"),
-  );
-  // La racine peut être son propre déclencheur (une carte entière).
-  if (root?.matches("[data-mesh-trigger]")) triggers.push(root);
+  const fixed = host.closest(".mesh-bg.is-fixed") !== null;
+  const scope: ParentNode = fixed ? document : (root ?? document);
   const abort = new AbortController();
+
+  // Le halo suit le pointeur sur toute la racine : les triggers ne jouent pas.
+  const triggers = spotlight
+    ? []
+    : Array.from(scope.querySelectorAll<HTMLElement>("[data-mesh-trigger]"));
+  // La racine peut être son propre déclencheur (une carte entière).
+  if (!spotlight && root?.matches("[data-mesh-trigger]")) triggers.push(root);
+
+  if (reveal) {
+    const target = fixed ? document.documentElement : (root ?? host.parentElement);
+    if (target) {
+      bindSpotlight(host, fixed ? null : root, target, mount, abort.signal);
+    }
+  }
 
   const active = new Set<HTMLElement>();
   let blend = 0;
@@ -242,7 +330,11 @@ function mountOne(host: HTMLElement) {
 
   const desktop = window.matchMedia(DESKTOP);
   const reduced = window.matchMedia(REDUCED);
-  const onChange = () => mount.setSpeed(desiredSpeed());
+  const onChange = () => {
+    // Le calque révélé repart au prochain mouvement du pointeur.
+    mount.setSpeed(reveal ? 0 : desiredSpeed());
+    if (reveal) host.closest(".mesh-reveal")?.classList.remove("is-spot");
+  };
   desktop.addEventListener("change", onChange);
   reduced.addEventListener("change", onChange);
   holder[STATE_KEY] = {

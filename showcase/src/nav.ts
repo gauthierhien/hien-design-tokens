@@ -8,7 +8,7 @@ export const nav: { title: string; items: NavItem[] }[] = [
       { href: "/colors", label: "Colors", description: "oklch tokens, light and dark mode." },
       { href: "/typography", label: "Typography", description: "Geist and Geist Mono, responsive scale." },
       { href: "/grid", label: "Grid", description: "8 columns, centered content, responsive variants." },
-      { href: "/animated-background", label: "Animated background", description: "Dark and light mesh, colored state on hover." },
+      { href: "/animated-background", label: "Animated background", description: "Dark and light mesh, rainbow or spotlight effect." },
     ],
   },
   {

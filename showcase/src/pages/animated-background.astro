@@ -7,7 +7,7 @@ import Button from "@hien/design-tokens/Button.astro";
 
 <Docs
   title="Animated background"
-  lead="The mesh (@paper-design/shaders) with grain, in two tones. When a trigger is hovered or focused, the shapes turn rainbow. Animated on desktop, frozen on mobile and with reduced motion."
+  lead="The mesh (@paper-design/shaders) with grain, in two tones and two effects. Rainbow: the shapes change color when a trigger is hovered or focused. Spotlight: the same colors show only in a halo that follows the pointer, the rest stays grey. Animated on desktop, frozen on mobile and with reduced motion."
 >
   <Demo
     label="MeshBackground · dark (footer, fixed background on apps), reacts to the button"
@@ -34,6 +34,32 @@ import Button from "@hien/design-tokens/Button.astro";
       <MeshBackground tone="light" />
       <div class="relative z-10 h-full flex items-center justify-center p-4 md:p-16">
         <Button href="https://cv.hien.design" label="Hover me" meshTrigger />
+      </div>
+    </div>
+  </Demo>
+  <Demo
+    label={'MeshBackground tone="light" effect="spotlight" · light, follows the pointer'}
+    code={`<div class="relative" data-mesh-root>
+  <MeshBackground tone="light" effect="spotlight" />
+</div>`}
+  >
+    <div class="relative aspect-video overflow-hidden text-black" data-mesh-root>
+      <MeshBackground tone="light" effect="spotlight" />
+      <div class="relative z-10 h-full flex items-center justify-center p-4 md:p-16">
+        <h2 class="mb-0">Move your pointer</h2>
+      </div>
+    </div>
+  </Demo>
+  <Demo
+    label={'MeshBackground effect="spotlight" · dark, follows the pointer'}
+    code={`<div class="relative theme-dark" data-mesh-root>
+  <MeshBackground effect="spotlight" />
+</div>`}
+  >
+    <div class="relative aspect-video overflow-hidden theme-dark text-white" data-mesh-root>
+      <MeshBackground effect="spotlight" />
+      <div class="relative z-10 h-full flex items-center justify-center p-4 md:p-16">
+        <h2 class="mb-0">Move your pointer</h2>
       </div>
     </div>
   </Demo>

@@ -14,22 +14,28 @@
  * tone="light" : version claire. Fond de page et formes grises (voile de
  * désaturation en plus) au repos ; au survol le voile s'efface et les
  * formes passent à l'arc-en-ciel. Une racine peut être son propre trigger.
+ * effect="spotlight" : alternative au trigger. Le fond de repos et
+ * l'arc-en-ciel sont ceux de l'effet par défaut, mais l'arc-en-ciel n'apparaît
+ * que dans un halo qui suit le pointeur sur toute la racine [data-mesh-root].
+ * Deux calques WebGL au lieu d'un ; le second est arrêté hors survol.
  * pose (0, 1, 2) : départ du shader, pour décaler des cartes voisines.
  */
 export interface Props {
   tone?: "dark" | "light";
+  effect?: "rainbow" | "spotlight";
   pose?: number;
   fixed?: boolean;
   /** Grain sur les zones noires (mode fixed), 0 pour le couper. */
   blackGrain?: number;
 }
 
-const { tone = "dark", pose = 0, fixed = false, blackGrain = 0.08 } = Astro.props;
+const { tone = "dark", effect = "rainbow", pose = 0, fixed = false, blackGrain = 0.08 } = Astro.props;
 ---
 
 <div
-  class:list={["mesh-bg", `is-${tone}`, { "is-fixed": fixed }]}
+  class:list={["mesh-bg", `is-${tone}`, `is-${effect}`, { "is-fixed": fixed }]}
   data-tone={tone}
+  data-effect={effect}
   data-pose={pose}
   style={`--black-grain-opacity: ${fixed ? blackGrain : 0};`}
   aria-hidden="true"
@@ -38,6 +44,15 @@ const { tone = "dark", pose = 0, fixed = false, blackGrain = 0.08 } = Astro.prop
     {tone === "light" && <div class="mesh-veil"></div>}
     <div class="mesh-grain"></div>
   </div>
+  {
+    effect === "spotlight" && (
+      <div class="mesh-reveal">
+        <div class="mesh-layer">
+          <div class="mesh-grain"></div>
+        </div>
+      </div>
+    )
+  }
 </div>
 
 <style>
@@ -137,6 +152,66 @@ const { tone = "dark", pose = 0, fixed = false, blackGrain = 0.08 } = Astro.prop
   :global([data-mesh-root][data-mesh-trigger]:hover) .mesh-veil,
   :global(.is-mesh-active) .mesh-veil {
     opacity: 0;
+  }
+
+  /* Halo : l'arc-en-ciel complet, tel qu'au survol d'un trigger, découpé
+     autour du pointeur. Le repos dessous ne réagit pas aux triggers. */
+  .mesh-bg.is-spotlight.is-light {
+    background: oklch(98.5% 0 0);
+  }
+
+  .mesh-bg.is-spotlight.is-dark > .mesh-layer {
+    opacity: 0.22 !important;
+  }
+
+  .mesh-bg.is-spotlight .mesh-veil {
+    opacity: 1 !important;
+  }
+
+  /* Courbe (1 - r²)³ : le bord s'éteint sans cassure visible. */
+  .mesh-reveal {
+    --spot-x: 50%;
+    --spot-y: 50%;
+    --spot-r: 360px;
+    --spot-mask: radial-gradient(
+      circle var(--spot-r) at var(--spot-x) var(--spot-y),
+      #000 0%,
+      rgb(0 0 0 / 0.97) 10%,
+      rgb(0 0 0 / 0.885) 20%,
+      rgb(0 0 0 / 0.754) 30%,
+      rgb(0 0 0 / 0.593) 40%,
+      rgb(0 0 0 / 0.422) 50%,
+      rgb(0 0 0 / 0.262) 60%,
+      rgb(0 0 0 / 0.133) 70%,
+      rgb(0 0 0 / 0.047) 80%,
+      rgb(0 0 0 / 0.007) 90%,
+      transparent 100%
+    );
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    opacity: 0;
+    background: oklch(0 0 0);
+    -webkit-mask-image: var(--spot-mask);
+    mask-image: var(--spot-mask);
+    transition: opacity 0.5s ease-out;
+  }
+
+  .mesh-bg.is-light .mesh-reveal {
+    background: oklch(98.5% 0 0);
+  }
+
+  .mesh-bg.is-fixed .mesh-reveal {
+    position: fixed;
+  }
+
+  .mesh-reveal:global(.is-spot) {
+    opacity: 1;
+  }
+
+  .mesh-bg.is-spotlight.is-dark .mesh-reveal .mesh-layer {
+    position: absolute;
+    opacity: 0.72 !important;
   }
 
   @media (prefers-reduced-motion: reduce) {
