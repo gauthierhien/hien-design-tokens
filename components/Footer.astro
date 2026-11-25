@@ -5,6 +5,7 @@
  * liens viennent de chaque site, en général du singleton Keystatic "Footer".
  * Dépendances côté site : @lucide/astro et @paper-design/shaders.
  * meshFixed : le fond animé couvre tout le viewport (voir MeshBackground).
+ * Slot background : remplace le mesh (cv.hien.design), sur le même fond noir.
  */
 import { siteHref, siteNav, type SiteKey } from "./sites.js";
 import MeshBackground from "./MeshBackground.astro";
@@ -96,7 +97,9 @@ const internalLinks = showSiteNav
 ---
 
 <footer class="footer-root theme-dark text-foreground p-4" data-mesh-root>
-  <MeshBackground fixed={meshFixed} />
+  <slot name="background">
+    <MeshBackground fixed={meshFixed} />
+  </slot>
   <div class="relative z-10">
     <!-- CTA Container -->
     <div class="2xl:grid 2xl:grid-cols-8">
