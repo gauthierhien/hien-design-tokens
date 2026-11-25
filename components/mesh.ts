@@ -103,22 +103,38 @@ function rainbowColors(): Rgba[] {
 }
 
 // Halo : toujours clair ou toujours sombre, quel que soit le thème de la page.
-// En sombre l'accent est assombri pour qu'un texte clair reste lisible dessus,
-// et les formes intermédiaires montées pour ne pas se perdre dans le noir.
+// En sombre, les formes intermédiaires sont montées pour ne pas se perdre dans
+// le noir ; c'est le voile .mesh-dim qui baisse la lumière hors du halo.
 function spotlightColors(tone: Tone): Rgba[] {
   const accent = readToken("--accent");
   const light = tone === "light";
   const base = light ? cssColor("oklch(98.5% 0 0)") : BLACK;
-  const shape = light ? accent : mixColor(BLACK, accent, 0.47);
+  const shape = light ? accent : mixColor(BLACK, accent, 0.95);
   return [
     base,
     base,
-    mixColor(base, shape, light ? 0.35 : 0.7),
+    mixColor(base, shape, light ? 0.35 : 0.63),
     shape,
     base,
-    mixColor(base, shape, light ? 0.62 : 1),
+    mixColor(base, shape, light ? 0.62 : 0.9),
     base,
   ];
+}
+
+// Le halo a été dessiné pour des cartes de 460 x 612 px. Le shader grandit avec
+// son bloc : sur un grand bloc, on resserre la composition (sinon les formes et
+// leur grain s'étalent) et on agrandit le halo en proportion.
+const SPOT_SCALE = 0.85;
+const SPOT_REFERENCE = 640;
+
+function spotlightScale(host: HTMLElement) {
+  const side = Math.max(host.offsetWidth, host.offsetHeight, 1);
+  const ratio = Math.min(1, Math.sqrt(SPOT_REFERENCE / side));
+  return Math.max(0.42, SPOT_SCALE * ratio);
+}
+
+function spotRadius(host: HTMLElement) {
+  return Math.max(220, 0.48 * Math.min(host.offsetWidth, host.offsetHeight));
 }
 
 // Position du pointeur dans le calque, même si la racine est inclinée (cartes).
@@ -150,6 +166,7 @@ function bindSpotlight(
     const { x, y } = spotPoint(host, root, event);
     host.style.setProperty("--spot-x", `${x}px`);
     host.style.setProperty("--spot-y", `${y}px`);
+    host.style.setProperty("--spot-r", `${spotRadius(host)}px`);
     host.classList.add("is-spot");
   };
   const opts = { signal, passive: true };
@@ -203,7 +220,7 @@ function mountOne(host: HTMLElement) {
       meshGradientFragmentShader,
       {
         u_fit: ShaderFitOptions.cover,
-        u_scale: 0.85,
+        u_scale: spotlight ? spotlightScale(host) : 0.85,
         u_rotation: 0,
         u_originX: 0.5,
         u_originY: 0.5,
@@ -250,6 +267,11 @@ function mountOne(host: HTMLElement) {
   if (spotlight) {
     const target = fixed ? document.documentElement : (root ?? host.parentElement);
     if (target) bindSpotlight(host, fixed ? null : root, target, abort.signal);
+    const resize = new ResizeObserver(() =>
+      mount.setUniforms({ u_scale: spotlightScale(host) }),
+    );
+    resize.observe(host);
+    abort.signal.addEventListener("abort", () => resize.disconnect());
   }
 
   const active = new Set<HTMLElement>();

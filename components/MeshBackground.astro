@@ -151,6 +151,7 @@ const { tone = "dark", effect = "rainbow", pose = 0, fixed = false, blackGrain =
   .mesh-bg.is-spotlight .mesh-layer {
     --spot-x: 50%;
     --spot-y: 50%;
+    --spot-r: 220px;
     opacity: 1 !important;
   }
 
@@ -170,14 +171,14 @@ const { tone = "dark", effect = "rainbow", pose = 0, fixed = false, blackGrain =
     position: absolute;
     inset: 0;
     z-index: 1;
-    background: oklch(0 0 0 / 0.25);
+    background: oklch(0 0 0 / 0.6);
     pointer-events: none;
   }
 
   .mesh-layer:global(.is-spot) .mesh-veil,
   .mesh-layer:global(.is-spot) .mesh-dim {
     --spot-mask: radial-gradient(
-      circle 220px at var(--spot-x) var(--spot-y),
+      circle var(--spot-r) at var(--spot-x) var(--spot-y),
       transparent 0%,
       rgb(0 0 0 / 0.12) 22%,
       rgb(0 0 0 / 0.45) 48%,
