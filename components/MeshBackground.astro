@@ -14,28 +14,35 @@
  * tone="light" : version claire. Fond de page et formes grises (voile de
  * désaturation en plus) au repos ; au survol le voile s'efface et les
  * formes passent à l'arc-en-ciel. Une racine peut être son propre trigger.
+ * effect="spotlight" : alternative à l'arc-en-ciel. Les formes sont à la
+ * couleur d'accent, grisées par le voile sauf dans un halo qui suit le
+ * pointeur sur toute la racine [data-mesh-root], sans trigger. En sombre, un
+ * second voile baisse aussi la lumière hors du halo.
  * pose (0, 1, 2) : départ du shader, pour décaler des cartes voisines.
  */
 export interface Props {
   tone?: "dark" | "light";
+  effect?: "rainbow" | "spotlight";
   pose?: number;
   fixed?: boolean;
   /** Grain sur les zones noires (mode fixed), 0 pour le couper. */
   blackGrain?: number;
 }
 
-const { tone = "dark", pose = 0, fixed = false, blackGrain = 0.08 } = Astro.props;
+const { tone = "dark", effect = "rainbow", pose = 0, fixed = false, blackGrain = 0.08 } = Astro.props;
 ---
 
 <div
-  class:list={["mesh-bg", `is-${tone}`, { "is-fixed": fixed }]}
+  class:list={["mesh-bg", `is-${tone}`, `is-${effect}`, { "is-fixed": fixed }]}
   data-tone={tone}
+  data-effect={effect}
   data-pose={pose}
   style={`--black-grain-opacity: ${fixed ? blackGrain : 0};`}
   aria-hidden="true"
 >
   <div class="mesh-layer">
-    {tone === "light" && <div class="mesh-veil"></div>}
+    {(tone === "light" || effect === "spotlight") && <div class="mesh-veil"></div>}
+    {tone === "dark" && effect === "spotlight" && <div class="mesh-dim"></div>}
     <div class="mesh-grain"></div>
   </div>
 </div>
@@ -137,6 +144,50 @@ const { tone = "dark", pose = 0, fixed = false, blackGrain = 0.08 } = Astro.prop
   :global([data-mesh-root][data-mesh-trigger]:hover) .mesh-veil,
   :global(.is-mesh-active) .mesh-veil {
     opacity: 0;
+  }
+
+  /* Halo : le voile (et l'assombrissement en sombre) est percé autour du
+     pointeur. La lumière se règle par couleur, pas par l'opacité du calque. */
+  .mesh-bg.is-spotlight .mesh-layer {
+    --spot-x: 50%;
+    --spot-y: 50%;
+    opacity: 1 !important;
+  }
+
+  .mesh-bg.is-spotlight.is-light {
+    background: oklch(98.5% 0 0);
+  }
+
+  .mesh-bg.is-spotlight .mesh-veil {
+    opacity: 1 !important;
+  }
+
+  .mesh-bg.is-spotlight .mesh-grain {
+    z-index: 2;
+  }
+
+  .mesh-dim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: oklch(0 0 0 / 0.25);
+    pointer-events: none;
+  }
+
+  .mesh-layer:global(.is-spot) .mesh-veil,
+  .mesh-layer:global(.is-spot) .mesh-dim {
+    --spot-mask: radial-gradient(
+      circle 220px at var(--spot-x) var(--spot-y),
+      transparent 0%,
+      rgb(0 0 0 / 0.12) 22%,
+      rgb(0 0 0 / 0.45) 48%,
+      rgb(0 0 0 / 0.82) 74%,
+      #000 100%
+    );
+    -webkit-mask-image: var(--spot-mask);
+    mask-image: var(--spot-mask);
+    -webkit-mask-mode: alpha;
+    mask-mode: alpha;
   }
 
   @media (prefers-reduced-motion: reduce) {

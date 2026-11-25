@@ -3,11 +3,18 @@ import Docs from "../layouts/Docs.astro";
 import Demo from "../components/Demo.astro";
 import MeshBackground from "@hien/design-tokens/MeshBackground.astro";
 import Button from "@hien/design-tokens/Button.astro";
+
+const cards = [
+  { label: "Product Concepting", text: "Grey at rest, the accent color comes back around the pointer." },
+  { label: "System Design", text: "Each card starts from its own pose, so neighbors never pulse together." },
+  { label: "Build & Ship", text: "The halo follows the pointer, even on a tilted card." },
+];
+const tilt = ["md:-rotate-3", "", "md:rotate-3"];
 ---
 
 <Docs
   title="Animated background"
-  lead="The mesh (@paper-design/shaders) with grain, in two tones. When a trigger is hovered or focused, the shapes turn rainbow. Animated on desktop, frozen on mobile and with reduced motion."
+  lead="The mesh (@paper-design/shaders) with grain, in two tones and two effects. Rainbow: the shapes change color when a trigger is hovered or focused. Spotlight: grey shapes take the accent color in a halo around the pointer. Animated on desktop, frozen on mobile and with reduced motion."
 >
   <Demo
     label="MeshBackground · dark (footer, fixed background on apps), reacts to the button"
@@ -35,6 +42,54 @@ import Button from "@hien/design-tokens/Button.astro";
       <div class="relative z-10 h-full flex items-center justify-center p-4 md:p-16">
         <Button href="https://cv.hien.design" label="Hover me" meshTrigger />
       </div>
+    </div>
+  </Demo>
+  <Demo
+    label={'MeshBackground tone="light" effect="spotlight" · light, follows the pointer'}
+    code={`<div class="relative" data-mesh-root>
+  <MeshBackground tone="light" effect="spotlight" pose={0} />
+  <div class="relative">…</div>
+</div>`}
+  >
+    <div class="relative grid gap-8 py-8 md:grid-cols-3 md:px-4">
+      {
+        cards.map((card, index) => (
+          <div
+            class:list={["relative aspect-[3/4] overflow-hidden border border-black/10 text-black", tilt[index]]}
+            data-mesh-root
+          >
+            <MeshBackground tone="light" effect="spotlight" pose={index} />
+            <div class="relative z-10 flex h-full flex-col justify-end gap-2 p-4 lg:p-6">
+              <h3>{card.label}</h3>
+              <p class="font-mono text-sm leading-relaxed font-light">{card.text}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </Demo>
+  <Demo
+    label={'MeshBackground effect="spotlight" · dark, follows the pointer'}
+    code={`<div class="relative theme-dark" data-mesh-root>
+  <MeshBackground effect="spotlight" pose={0} />
+  <div class="relative">…</div>
+</div>`}
+  >
+    <div class="relative grid gap-8 py-8 md:grid-cols-3 md:px-4">
+      {
+        cards.map((card, index) => (
+          <div
+            class:list={["relative aspect-[3/4] overflow-hidden border border-white/15 text-white", tilt[index]]}
+            data-mesh-root
+          >
+            <MeshBackground effect="spotlight" pose={index} />
+            <div class="relative z-10 flex h-full flex-col justify-end gap-2 p-4 lg:p-6">
+              <h3>{card.label}</h3>
+              <p class="font-mono text-sm leading-relaxed font-light">{card.text}</p>
+            </div>
+          </div>
+        ))
+      }
     </div>
   </Demo>
 </Docs>

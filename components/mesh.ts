@@ -102,6 +102,63 @@ function rainbowColors(): Rgba[] {
   return [BLACK, hue(28), BLACK, hue(125), BLACK, hue(210), hue(320)];
 }
 
+// Halo : toujours clair ou toujours sombre, quel que soit le thème de la page.
+// En sombre l'accent est assombri pour qu'un texte clair reste lisible dessus,
+// et les formes intermédiaires montées pour ne pas se perdre dans le noir.
+function spotlightColors(tone: Tone): Rgba[] {
+  const accent = readToken("--accent");
+  const light = tone === "light";
+  const base = light ? cssColor("oklch(98.5% 0 0)") : BLACK;
+  const shape = light ? accent : mixColor(BLACK, accent, 0.47);
+  return [
+    base,
+    base,
+    mixColor(base, shape, light ? 0.35 : 0.7),
+    shape,
+    base,
+    mixColor(base, shape, light ? 0.62 : 1),
+    base,
+  ];
+}
+
+// Position du pointeur dans le calque, même si la racine est inclinée (cartes).
+function spotPoint(host: HTMLElement, root: HTMLElement | null, event: PointerEvent) {
+  const rect = host.getBoundingClientRect();
+  const matrix = new DOMMatrix(root ? getComputedStyle(root).transform : "none");
+  matrix.e = 0;
+  matrix.f = 0;
+  const local = matrix
+    .inverse()
+    .transformPoint(
+      new DOMPoint(
+        event.clientX - rect.left - rect.width / 2,
+        event.clientY - rect.top - rect.height / 2,
+      ),
+    );
+  return { x: local.x + host.offsetWidth / 2, y: local.y + host.offsetHeight / 2 };
+}
+
+function bindSpotlight(
+  host: HTMLElement,
+  root: HTMLElement | null,
+  target: HTMLElement,
+  signal: AbortSignal,
+) {
+  const off = () => host.classList.remove("is-spot");
+  const move = (event: PointerEvent) => {
+    if (desiredSpeed() === 0) return off();
+    const { x, y } = spotPoint(host, root, event);
+    host.style.setProperty("--spot-x", `${x}px`);
+    host.style.setProperty("--spot-y", `${y}px`);
+    host.classList.add("is-spot");
+  };
+  const opts = { signal, passive: true };
+  target.addEventListener("pointermove", move, opts);
+  target.addEventListener("pointerdown", move, opts);
+  target.addEventListener("pointerleave", off, opts);
+  target.addEventListener("pointercancel", off, opts);
+}
+
 function easeInOut(t: number) {
   return t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2;
 }
@@ -131,8 +188,13 @@ function mountOne(host: HTMLElement) {
 
   const bg = host.closest<HTMLElement>(".mesh-bg");
   const tone: Tone = bg?.dataset.tone === "light" ? "light" : "dark";
+  const spotlight = bg?.dataset.effect === "spotlight";
   const pose = POSES[Number(bg?.dataset.pose ?? 0) % POSES.length] ?? POSES[0];
-  const rest = tone === "light" ? lightRest() : restColors();
+  const rest = spotlight
+    ? spotlightColors(tone)
+    : tone === "light"
+      ? lightRest()
+      : restColors();
   const rainbow = tone === "light" ? lightRainbow() : rainbowColors();
   let mount: ShaderMount;
   try {
@@ -174,15 +236,21 @@ function mountOne(host: HTMLElement) {
   // [data-mesh-root] (le footer), ou de toute la page s'il est fixé au
   // viewport (un bouton du hero peut alors le déclencher aussi).
   const root = host.closest<HTMLElement>("[data-mesh-root]");
-  const scope: ParentNode = host.closest(".mesh-bg.is-fixed")
-    ? document
-    : (root ?? document);
-  const triggers = Array.from(
-    scope.querySelectorAll<HTMLElement>("[data-mesh-trigger]"),
-  );
-  // La racine peut être son propre déclencheur (une carte entière).
-  if (root?.matches("[data-mesh-trigger]")) triggers.push(root);
+  const fixed = host.closest(".mesh-bg.is-fixed") !== null;
+  const scope: ParentNode = fixed ? document : (root ?? document);
   const abort = new AbortController();
+
+  // Le halo suit le pointeur sur toute la racine : les triggers ne jouent pas.
+  const triggers = spotlight
+    ? []
+    : Array.from(scope.querySelectorAll<HTMLElement>("[data-mesh-trigger]"));
+  // La racine peut être son propre déclencheur (une carte entière).
+  if (!spotlight && root?.matches("[data-mesh-trigger]")) triggers.push(root);
+
+  if (spotlight) {
+    const target = fixed ? document.documentElement : (root ?? host.parentElement);
+    if (target) bindSpotlight(host, fixed ? null : root, target, abort.signal);
+  }
 
   const active = new Set<HTMLElement>();
   let blend = 0;
@@ -242,7 +310,10 @@ function mountOne(host: HTMLElement) {
 
   const desktop = window.matchMedia(DESKTOP);
   const reduced = window.matchMedia(REDUCED);
-  const onChange = () => mount.setSpeed(desiredSpeed());
+  const onChange = () => {
+    mount.setSpeed(desiredSpeed());
+    if (desiredSpeed() === 0) host.classList.remove("is-spot");
+  };
   desktop.addEventListener("change", onChange);
   reduced.addEventListener("change", onChange);
   holder[STATE_KEY] = {
