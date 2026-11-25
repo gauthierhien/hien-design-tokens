@@ -102,7 +102,7 @@ function rainbowColors(): Rgba[] {
 
 // Rayon du halo, proportionnel au bloc.
 function spotRadius(host: HTMLElement) {
-  return Math.max(260, 0.6 * Math.min(host.offsetWidth, host.offsetHeight));
+  return Math.max(360, 0.9 * Math.min(host.offsetWidth, host.offsetHeight));
 }
 
 // Position du pointeur dans le calque, même si la racine est inclinée (cartes).

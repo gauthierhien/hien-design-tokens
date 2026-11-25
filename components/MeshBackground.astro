@@ -168,16 +168,23 @@ const { tone = "dark", effect = "rainbow", pose = 0, fixed = false, blackGrain =
     opacity: 1 !important;
   }
 
+  /* Courbe (1 - r²)³ : le bord s'éteint sans cassure visible. */
   .mesh-reveal {
     --spot-x: 50%;
     --spot-y: 50%;
-    --spot-r: 260px;
+    --spot-r: 360px;
     --spot-mask: radial-gradient(
       circle var(--spot-r) at var(--spot-x) var(--spot-y),
       #000 0%,
-      rgb(0 0 0 / 0.94) 28%,
-      rgb(0 0 0 / 0.7) 52%,
-      rgb(0 0 0 / 0.28) 78%,
+      rgb(0 0 0 / 0.97) 10%,
+      rgb(0 0 0 / 0.885) 20%,
+      rgb(0 0 0 / 0.754) 30%,
+      rgb(0 0 0 / 0.593) 40%,
+      rgb(0 0 0 / 0.422) 50%,
+      rgb(0 0 0 / 0.262) 60%,
+      rgb(0 0 0 / 0.133) 70%,
+      rgb(0 0 0 / 0.047) 80%,
+      rgb(0 0 0 / 0.007) 90%,
       transparent 100%
     );
     position: absolute;
