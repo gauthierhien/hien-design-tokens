@@ -57,8 +57,7 @@ function readToken(name: string): Rgba {
 
 // Clair : fond de page et formes grises, sans accent, pour qu'aucun jaune
 // n'apparaisse pendant la transition vers l'arc-en-ciel.
-function lightRest(): Rgba[] {
-  const background = readToken("--background");
+function lightRest(background = readToken("--background")): Rgba[] {
   const shape = cssColor("oklch(0.86 0 0)");
   return [
     background,
@@ -71,8 +70,7 @@ function lightRest(): Rgba[] {
   ];
 }
 
-function lightRainbow(): Rgba[] {
-  const background = readToken("--background");
+function lightRainbow(background = readToken("--background")): Rgba[] {
   const hue = (h: number) => cssColor(`oklch(0.84 0.14 ${h})`);
   // Pas de teinte entre 80 et 130 : elle tire au jaune en clair.
   return [background, background, hue(28), hue(155), background, hue(230), hue(320)];
@@ -102,39 +100,9 @@ function rainbowColors(): Rgba[] {
   return [BLACK, hue(28), BLACK, hue(125), BLACK, hue(210), hue(320)];
 }
 
-// Halo : toujours clair ou toujours sombre, quel que soit le thème de la page.
-// En sombre, les formes intermédiaires sont montées pour ne pas se perdre dans
-// le noir ; c'est le voile .mesh-dim qui baisse la lumière hors du halo.
-function spotlightColors(tone: Tone): Rgba[] {
-  const accent = readToken("--accent");
-  const light = tone === "light";
-  const base = light ? cssColor("oklch(98.5% 0 0)") : BLACK;
-  const shape = light ? accent : mixColor(BLACK, accent, 0.95);
-  return [
-    base,
-    base,
-    mixColor(base, shape, light ? 0.35 : 0.63),
-    shape,
-    base,
-    mixColor(base, shape, light ? 0.62 : 0.9),
-    base,
-  ];
-}
-
-// Le halo a été dessiné pour des cartes de 460 x 612 px. Le shader grandit avec
-// son bloc : sur un grand bloc, on resserre la composition (sinon les formes et
-// leur grain s'étalent) et on agrandit le halo en proportion.
-const SPOT_SCALE = 0.85;
-const SPOT_REFERENCE = 640;
-
-function spotlightScale(host: HTMLElement) {
-  const side = Math.max(host.offsetWidth, host.offsetHeight, 1);
-  const ratio = Math.min(1, Math.sqrt(SPOT_REFERENCE / side));
-  return Math.max(0.42, SPOT_SCALE * ratio);
-}
-
+// Rayon du halo, proportionnel au bloc.
 function spotRadius(host: HTMLElement) {
-  return Math.max(220, 0.48 * Math.min(host.offsetWidth, host.offsetHeight));
+  return Math.max(260, 0.6 * Math.min(host.offsetWidth, host.offsetHeight));
 }
 
 // Position du pointeur dans le calque, même si la racine est inclinée (cartes).
@@ -154,26 +122,56 @@ function spotPoint(host: HTMLElement, root: HTMLElement | null, event: PointerEv
   return { x: local.x + host.offsetWidth / 2, y: local.y + host.offsetHeight / 2 };
 }
 
+const REVEAL_FADE_MS = 500;
+
+// reveal : calque arc-en-ciel découpé par le halo. rest : calque de repos, du
+// même shader. Hors survol le calque révélé est arrêté ; à l'entrée il reprend
+// l'instant du repos, pour que les formes coïncident.
 function bindSpotlight(
   host: HTMLElement,
   root: HTMLElement | null,
   target: HTMLElement,
+  reveal: ShaderMount,
   signal: AbortSignal,
 ) {
-  const off = () => host.classList.remove("is-spot");
+  const mask = host.closest<HTMLElement>(".mesh-reveal");
+  const rest = mask?.parentElement?.querySelector<PaperShaderElement>(
+    ":scope > .mesh-layer",
+  );
+  if (!mask) return;
+  let stopTimer = 0;
+  let on = false;
+
+  const off = () => {
+    if (!on) return;
+    on = false;
+    mask.classList.remove("is-spot");
+    stopTimer = window.setTimeout(() => reveal.setSpeed(0), REVEAL_FADE_MS);
+  };
   const move = (event: PointerEvent) => {
-    if (desiredSpeed() === 0) return off();
+    const speed = desiredSpeed();
+    if (speed === 0) return off();
     const { x, y } = spotPoint(host, root, event);
-    host.style.setProperty("--spot-x", `${x}px`);
-    host.style.setProperty("--spot-y", `${y}px`);
-    host.style.setProperty("--spot-r", `${spotRadius(host)}px`);
-    host.classList.add("is-spot");
+    mask.style.setProperty("--spot-x", `${x}px`);
+    mask.style.setProperty("--spot-y", `${y}px`);
+    if (on && mask.classList.contains("is-spot")) return;
+    on = true;
+    window.clearTimeout(stopTimer);
+    mask.style.setProperty("--spot-r", `${spotRadius(host)}px`);
+    const frame = rest?.paperShaderMount?.getCurrentFrame();
+    if (frame !== undefined) reveal.setFrame(frame);
+    reveal.setSpeed(speed);
+    mask.classList.add("is-spot");
   };
   const opts = { signal, passive: true };
   target.addEventListener("pointermove", move, opts);
   target.addEventListener("pointerdown", move, opts);
   target.addEventListener("pointerleave", off, opts);
   target.addEventListener("pointercancel", off, opts);
+  signal.addEventListener("abort", () => {
+    off();
+    window.clearTimeout(stopTimer);
+  });
 }
 
 function easeInOut(t: number) {
@@ -207,12 +205,15 @@ function mountOne(host: HTMLElement) {
   const tone: Tone = bg?.dataset.tone === "light" ? "light" : "dark";
   const spotlight = bg?.dataset.effect === "spotlight";
   const pose = POSES[Number(bg?.dataset.pose ?? 0) % POSES.length] ?? POSES[0];
-  const rest = spotlight
-    ? spotlightColors(tone)
+  const reveal = host.closest(".mesh-reveal") !== null;
+  // Le halo clair reste clair, quel que soit le thème de la page.
+  const paper = spotlight ? cssColor("oklch(98.5% 0 0)") : undefined;
+  const rainbow = tone === "light" ? lightRainbow(paper) : rainbowColors();
+  const rest = reveal
+    ? rainbow
     : tone === "light"
-      ? lightRest()
+      ? lightRest(paper)
       : restColors();
-  const rainbow = tone === "light" ? lightRainbow() : rainbowColors();
   let mount: ShaderMount;
   try {
     mount = new ShaderMount(
@@ -220,7 +221,7 @@ function mountOne(host: HTMLElement) {
       meshGradientFragmentShader,
       {
         u_fit: ShaderFitOptions.cover,
-        u_scale: spotlight ? spotlightScale(host) : 0.85,
+        u_scale: 0.85,
         u_rotation: 0,
         u_originX: 0.5,
         u_originY: 0.5,
@@ -236,7 +237,7 @@ function mountOne(host: HTMLElement) {
         u_grainOverlay: 0,
       },
       { alpha: false, antialias: false, powerPreference: "low-power" },
-      desiredSpeed(),
+      reveal ? 0 : desiredSpeed(),
       pose.frame,
       2,
       720 * 1000,
@@ -264,14 +265,11 @@ function mountOne(host: HTMLElement) {
   // La racine peut être son propre déclencheur (une carte entière).
   if (!spotlight && root?.matches("[data-mesh-trigger]")) triggers.push(root);
 
-  if (spotlight) {
+  if (reveal) {
     const target = fixed ? document.documentElement : (root ?? host.parentElement);
-    if (target) bindSpotlight(host, fixed ? null : root, target, abort.signal);
-    const resize = new ResizeObserver(() =>
-      mount.setUniforms({ u_scale: spotlightScale(host) }),
-    );
-    resize.observe(host);
-    abort.signal.addEventListener("abort", () => resize.disconnect());
+    if (target) {
+      bindSpotlight(host, fixed ? null : root, target, mount, abort.signal);
+    }
   }
 
   const active = new Set<HTMLElement>();
@@ -333,8 +331,9 @@ function mountOne(host: HTMLElement) {
   const desktop = window.matchMedia(DESKTOP);
   const reduced = window.matchMedia(REDUCED);
   const onChange = () => {
-    mount.setSpeed(desiredSpeed());
-    if (desiredSpeed() === 0) host.classList.remove("is-spot");
+    // Le calque révélé repart au prochain mouvement du pointeur.
+    mount.setSpeed(reveal ? 0 : desiredSpeed());
+    if (reveal) host.closest(".mesh-reveal")?.classList.remove("is-spot");
   };
   desktop.addEventListener("change", onChange);
   reduced.addEventListener("change", onChange);

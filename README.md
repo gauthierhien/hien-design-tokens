@@ -64,7 +64,7 @@ Autres composants (v1.4.0) :
 | `Lightbox.astro` | Visionneuse plein écran | `id`, `images` |
 | `Thumbnail.astro` | Vignette d'image sur fond muted (brique de base) | `image`, `alt`, `aspect` (`square`, `video`, `wide`), `padding` (`15%`, `3rem`, `none`), `href` |
 | `Carousel.astro` | Section carrousel Swiper : SectionHeader + flèches, slides en ImageWide | `items` (`image`, `title`, `link`), `tag`, `heading`, `body`, `link` |
-| `MeshBackground.astro` | Fond animé (shader mesh, grain), sombre ou clair, effet arc-en-ciel ou halo (`spotlight` : accent révélé autour du pointeur, sans déclencheur) | `tone` (`dark`, `light`), `effect` (`rainbow`, `spotlight`), `pose` (0 à 2), `fixed`, `blackGrain` ; parent `[data-mesh-root]`, déclencheurs `[data-mesh-trigger]` (la racine peut l'être elle-même) |
+| `MeshBackground.astro` | Fond animé (shader mesh, grain), sombre ou clair, effet arc-en-ciel ou halo (`spotlight` : mêmes couleurs, révélées autour du pointeur, sans déclencheur) | `tone` (`dark`, `light`), `effect` (`rainbow`, `spotlight`), `pose` (0 à 2), `fixed`, `blackGrain` ; parent `[data-mesh-root]`, déclencheurs `[data-mesh-trigger]` (la racine peut l'être elle-même) |
 
 Le Footer utilise `MeshBackground` et `Button` ; `meshFixed` fixe son fond au viewport (apps.hien.design).
 - `theme.css` déclare `@source "./components"` : Tailwind génère les classes des composants sans config.
