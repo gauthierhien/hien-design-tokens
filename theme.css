@@ -162,7 +162,7 @@
   --color-status: var(--status);
 }
 
-/* Grille de page commune à hien.design, feed et cv (et apps) : pleine largeur
+/* Grille de page commune à hien.design, playground et cv (et apps) : pleine largeur
    avec 16px de marge (px-4) sous md, puis 8 colonnes sans gouttière. Le
    contenu occupe les colonnes 2 à 7 dès md, puis 3 à 6 en 2xl. */
 @utility page-grid {

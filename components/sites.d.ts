@@ -1,7 +1,7 @@
-export type SiteKey = "home" | "feed" | "apps" | "cv";
+export type SiteKey = "home" | "playground" | "apps" | "cv";
 export const SITES: {
   readonly home: string;
-  readonly feed: string;
+  readonly playground: string;
   readonly apps: string;
   readonly cv: string;
 };

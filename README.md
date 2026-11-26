@@ -41,11 +41,11 @@ import Footer from "@hien/design-tokens/Footer.astro";
 const header = await getEntry("header-data", "index");
 const footer = await getEntry("footer-data", "index");
 ---
-<Header currentSite="feed" tagline={header?.data?.tagline} />
-<Footer currentSite="feed" {...footer?.data} />
+<Header currentSite="playground" tagline={header?.data?.tagline} />
+<Footer currentSite="playground" {...footer?.data} />
 ```
 
-- `currentSite` (`home`, `feed`, `apps`, `cv`) : le logo et la navigation entre sites pointent en relatif vers le site courant, en absolu vers les autres (`@hien/design-tokens/sites`).
+- `currentSite` (`home`, `playground`, `apps`, `cv`) : le logo et la navigation entre sites pointent en relatif vers le site courant, en absolu vers les autres (`@hien/design-tokens/sites`).
 - Header : `tagline`, `logo` (image du CMS) ou `logoSrc` (défaut `/gauthier-hien-logo.svg`), `logoAlt`, `logoHref`.
 - Footer : `availabilityLabel`, `isAvailable` (décoché : ligne masquée), `heading` (un « ? » coupe le titre, la suite passe en gris), `ctaLabel`, `ctaEmail` ou `ctaHref`, `navLinks`, `credit`. Options de structure : `showSiteNav` (navigation Portfolio, Playground, Indie Apps, CV ; les `navLinks` du CMS, LinkedIn et Mail par défaut, forment un second groupe en dessous, sans doublon vers l'accueil d'un site), `homeLink` (lien Home en tête des liens du CMS), `externalInNewTab`, `showTime` (heure de Paris), `meshFixed` (fond fixé au viewport). Slot `background` : remplace le mesh par un autre calque, sur le même fond noir. Les liens relatifs vers la page courante sont masqués.
 - Peer dependencies côté site : `astro`, `@keystatic/core`, `@lucide/astro`, `@paper-design/shaders`, `swiper` (pour le Carousel).
@@ -60,7 +60,7 @@ Autres composants (v1.4.0) :
 | `ImageSquare.astro` | Image carrée, légende et lien optionnels, ou Lightbox | mêmes props qu'ImageWide |
 | `SectionHeader.astro` | En-tête de section : badge, titre, texte (tous optionnels), lien « Learn more » vers une page détail, slot `aside` | `tag`, `heading`, `body`, `link` (`href`, `label`, `ariaLabel`, `target`), `bleed` |
 | `SectionImageWide.astro` | Section image large + en-tête dessus ou dessous (Module A) | `image`, `fit`, `caption`, `href`, `tag`, `heading`, `body`, `link`, `headerPosition` |
-| `SectionImageGrid.astro` | Section grille d'images (1 image : large ; sinon carrés), visionneuse, pilule « + » (Modules B et D, médias du feed) | `items` (images ou `{ image, caption, href }`), `columns`, `lightbox`, `cta`, `tag`, `heading`, `body`, `link` |
+| `SectionImageGrid.astro` | Section grille d'images (1 image : large ; sinon carrés), visionneuse, pilule « + » (Modules B et D, médias du playground) | `items` (images ou `{ image, caption, href }`), `columns`, `lightbox`, `cta`, `tag`, `heading`, `body`, `link` |
 | `Lightbox.astro` | Visionneuse plein écran | `id`, `images` |
 | `Thumbnail.astro` | Vignette d'image sur fond muted (brique de base) | `image`, `alt`, `aspect` (`square`, `video`, `wide`), `padding` (`15%`, `3rem`, `none`), `href` |
 | `Carousel.astro` | Section carrousel Swiper : SectionHeader + flèches, slides en ImageWide | `items` (`image`, `title`, `link`), `tag`, `heading`, `body`, `link` |
