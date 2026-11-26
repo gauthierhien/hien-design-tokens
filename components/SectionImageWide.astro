@@ -11,6 +11,8 @@ import SectionHeader, { type SectionLink } from "./SectionHeader.astro";
 
 export interface Props {
   image: ImageMetadata | null;
+  /** MP4 muet en boucle à la place de l'image (qui devient son poster). */
+  video?: string | null;
   alt?: string | null;
   /** cover (défaut) : l'image remplit le cadre ; contain : image entière. */
   fit?: "contain" | "cover";
@@ -27,6 +29,7 @@ export interface Props {
 
 const {
   image,
+  video,
   alt,
   fit = "cover",
   caption,
@@ -44,9 +47,10 @@ const header = { tag, heading, body, link };
 <section class:list={["flex flex-col gap-4 md:gap-8 px-4", extraClass]}>
   {headerPosition === "before" && <SectionHeader {...header} />}
   {
-    image && (
+    (image || video) && (
       <ImageWide
         image={image}
+        video={video}
         alt={alt || heading || "Image"}
         fit={fit}
         padding="3rem"

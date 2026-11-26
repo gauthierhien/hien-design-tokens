@@ -17,6 +17,8 @@ import Button from "./Button.astro";
 
 export interface GridItem {
   image: ImageMetadata | null;
+  /** MP4 muet en boucle à la place de l'image (qui devient son poster). */
+  video?: string | null;
   alt?: string | null;
   caption?: string | null;
   href?: string | null;
@@ -51,7 +53,7 @@ const items = (raw ?? [])
   .map((item) =>
     item && "src" in item ? ({ image: item } as GridItem) : (item as GridItem | null),
   )
-  .filter((item): item is GridItem & { image: ImageMetadata } => Boolean(item?.image));
+  .filter((item): item is GridItem => Boolean(item?.image || item?.video));
 
 const single = items.length === 1;
 const name = heading || "Gallery";
@@ -78,6 +80,7 @@ const hasHeader = Boolean(tag || heading || body || link?.href);
         {items.map((item, index) => {
           const shared = {
             image: item.image,
+            video: item.video,
             alt: altOf(item, index),
             caption: item.caption,
             href: item.href,
@@ -108,7 +111,11 @@ const hasHeader = Boolean(tag || heading || body || link?.href);
   lightbox && items.length > 0 && (
     <Lightbox
       id={lightboxId}
-      images={items.map((item, index) => ({ src: item.image, alt: altOf(item, index) }))}
+      images={items.map((item, index) => ({
+        src: item.image,
+        video: item.video,
+        alt: altOf(item, index),
+      }))}
     />
   )
 }

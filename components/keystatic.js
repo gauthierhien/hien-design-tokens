@@ -57,3 +57,16 @@ export const footerSingleton = singleton({
     ),
   },
 });
+
+// Champ MP4 pour une vidéo en boucle (LoopVideo, Thumbnail, sections).
+// Servi tel quel depuis public/videos/<folder> (Astro n'optimise pas les
+// vidéos) ; l'intégration `@hien/design-tokens/videos` le compresse en dev.
+export const loopVideoField = (label = "Video (MP4)", { folder = "media", description } = {}) =>
+  fields.file({
+    label,
+    directory: `public/videos/${folder}`,
+    publicPath: `/videos/${folder}/`,
+    description:
+      description ??
+      "Optional. Plays muted, in a loop, instead of the image, which becomes its poster. Compressed automatically; keep it short (a few seconds).",
+  });

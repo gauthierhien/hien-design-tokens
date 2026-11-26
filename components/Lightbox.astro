@@ -3,16 +3,19 @@
  * Visionneuse plein écran (Swiper). Un élément [data-lightbox-open={id}]
  * avec data-lightbox-index l'ouvre sur l'image voulue ; ImageWide,
  * ImageSquare et SectionImageGrid posent ces attributs avec leur prop
- * lightbox. Échap ferme, flèches du clavier pour naviguer.
+ * lightbox. Échap ferme, flèches du clavier pour naviguer. Une entrée avec
+ * `video` affiche le MP4 en boucle (l'image sert de poster) ; il ne joue que
+ * sur la slide visible.
  */
 import { Image } from "astro:assets";
 import { ChevronLeft, ChevronRight, X } from "@lucide/astro";
 import type { ImageMetadata } from "astro";
 import "swiper/css";
+import LoopVideo from "./LoopVideo.astro";
 
 export interface Props {
   id: string;
-  images: { src: ImageMetadata; alt: string }[];
+  images: { src?: ImageMetadata | null; video?: string | null; alt: string }[];
 }
 
 const { id, images } = Astro.props;
@@ -28,7 +31,11 @@ const { id, images } = Astro.props;
     <div class="swiper-wrapper">
       {images.map((item) => (
         <div class="swiper-slide">
-          <Image src={item.src} alt={item.alt} />
+          {item.video ? (
+            <LoopVideo src={item.video} poster={item.src} label={item.alt} />
+          ) : (
+            item.src && <Image src={item.src} alt={item.alt} />
+          )}
         </div>
       ))}
     </div>
@@ -142,6 +149,14 @@ const { id, images } = Astro.props;
     height: auto !important;
     max-width: 80%;
     max-height: 80%;
+    object-fit: contain;
+  }
+
+  /* LoopVideo est un autre composant : pas de scope. Taille fixe car la
+     vidéo n'a pas de dimensions avant le chargement (preload none). */
+  .lightbox-swiper .swiper-slide :global(video) {
+    width: 80%;
+    height: 80%;
     object-fit: contain;
   }
 
