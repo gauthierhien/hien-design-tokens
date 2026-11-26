@@ -10,7 +10,7 @@
 import { ChevronLeft, ChevronRight } from "@lucide/astro";
 import type { ImageMetadata } from "astro";
 import "swiper/css";
-import SectionHeader, { type SectionDetail, type SectionLink } from "./SectionHeader.astro";
+import SectionHeader, { type SectionLink } from "./SectionHeader.astro";
 import ImageWide from "./ImageWide.astro";
 
 export interface CarouselItem {
@@ -20,8 +20,6 @@ export interface CarouselItem {
   title?: string | null;
   description?: string | null;
   link?: string | null;
-  /** Mention encore à écrire (ex. lien manquant), sous la légende, en pointillé. */
-  placeholder?: string | null;
 }
 
 export interface Props {
@@ -31,12 +29,10 @@ export interface Props {
   body?: string | null;
   /** Lien « Learn more » après le texte (page détail). */
   link?: SectionLink | null;
-  /** Lignes libellé / valeur sous le texte (voir SectionHeader). */
-  details?: (SectionDetail | null)[] | null;
   class?: string;
 }
 
-const { items: rawItems, tag, heading, body, link, details, class: extraClass } = Astro.props;
+const { items: rawItems, tag, heading, body, link, class: extraClass } = Astro.props;
 const items =
   rawItems?.filter(
     (item): item is CarouselItem => item?.image != null || Boolean(item?.video),
@@ -49,7 +45,7 @@ const items =
     extraClass,
   ]}
 >
-  <SectionHeader tag={tag} heading={heading} body={body} link={link} details={details} bleed>
+  <SectionHeader tag={tag} heading={heading} body={body} link={link} bleed>
     {
       items.length >= 2 && (
         <div slot="aside" class="hidden md:flex items-center gap-2 shrink-0">
@@ -90,22 +86,12 @@ const items =
               caption={item.title}
               href={item.link}
             />
-            {item.placeholder && (
-              <span class="hd-carousel-placeholder mt-2 self-start">{item.placeholder}</span>
-            )}
           </div>
         ))
       }
     </div>
   </div>
 </section>
-
-<style>
-  .hd-carousel-placeholder {
-    padding: 0.125rem 0.5rem;
-    border: 1px dashed var(--foreground-muted);
-  }
-</style>
 
 <script>
   import Swiper from "swiper";
