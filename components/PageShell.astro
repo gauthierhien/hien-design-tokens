@@ -8,6 +8,10 @@
  *
  * Slots : header, défaut (dans <main>), footer, background (calque derrière
  * le contenu, ex. le crayon du cv).
+ * Un footer plus haut que le viewport (petit écran, zoom) reste lisible en
+ * entier : son bas collant descend de l'excédent (--footer-height, mesuré
+ * par le script), il se révèle donc par le haut puis défile normalement.
+ *
  * Ids stables pour les scripts des sites : #content-wrapper, #footer-track,
  * #footer-container. Un site peut réduire --footer-track-overlap sur
  * #footer-track (apps le fait sous la fenêtre de son hero).
@@ -49,7 +53,7 @@
 
   #footer-container {
     position: sticky;
-    bottom: 0;
+    bottom: min(0px, calc(100svh - var(--footer-height, 0px)));
     width: 100%;
   }
 
@@ -73,3 +77,17 @@
     pointer-events: none;
   }
 </style>
+
+<script>
+  const watchFooterHeight = () => {
+    const footer = document.getElementById("footer-container");
+    if (!footer || footer.dataset.heightWatched) return;
+    footer.dataset.heightWatched = "";
+    new ResizeObserver(() => {
+      footer.style.setProperty("--footer-height", `${footer.offsetHeight}px`);
+    }).observe(footer);
+  };
+
+  watchFooterHeight();
+  document.addEventListener("astro:page-load", watchFooterHeight);
+</script>
