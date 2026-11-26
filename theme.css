@@ -1,7 +1,8 @@
 /**
  * @hien/design-tokens (repo hien-design-tokens): brand tokens
  * Consume in Tailwind v4 apps via: @import "@hien/design-tokens/theme.css";
- * Fonts must be loaded by the consuming app (e.g. @fontsource-variable/geist).
+ * Fonts: geistFonts() in astro.config + <Fonts /> in <head> (files from the
+ * app's @fontsource-variable/geist and geist-mono).
  *
  * Type scale matches portfolio-2026 (Tailwind default breakpoints:
  * md 768, lg 1024, xl 1280, 2xl 1536). Sizes are literals in @theme so
@@ -37,10 +38,20 @@
   --color-border: var(--border);
   --color-status: var(--status);
 
-  --font-sans: "Geist Variable", system-ui, sans-serif;
-  --font-mono:
-    "Geist Mono Variable", ui-monospace, SFMono-Regular, Menlo, Monaco,
-    Consolas, "Liberation Mono", "Courier New", monospace;
+  /* --font-geist / --font-geist-mono : posées par <Fonts /> (geistFonts). */
+  --font-sans: var(--font-geist, "Geist Variable", system-ui, sans-serif);
+  --font-mono: var(
+    --font-geist-mono,
+    "Geist Mono Variable",
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Monaco,
+    Consolas,
+    "Liberation Mono",
+    "Courier New",
+    monospace
+  );
 
   --text-h1: 2.25rem;
   --text-h1--line-height: 1;
@@ -59,6 +70,18 @@
   --text-label--line-height: 1rem;
   --text-strong: 0.875rem;
   --text-strong--line-height: 1.5rem;
+}
+
+/* static : variables toujours émises, les composants les lisent en CSS. */
+@theme static {
+  /* Mouvement. ease-out-expo : défilement de la Lightbox (classe ease-out-expo).
+     hover : survols (boutons, footer). enter : apparition du haut de page. */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-hover: 0.3s;
+  --duration-enter: 0.7s;
+  --duration-enter-slow: 0.9s;
+  --duration-enter-item: 0.55s;
+  --distance-enter: 12px;
 }
 
 :root {
@@ -171,4 +194,96 @@
 
 @utility page-grid-content {
   @apply md:col-start-2 md:col-span-6 2xl:col-start-3 2xl:col-span-4;
+}
+
+/* Rythme vertical entre les grandes sections (24 / 48 / 56 / 64 / 72). */
+@utility section-pt {
+  @apply pt-24 md:pt-48 lg:pt-56 xl:pt-64 2xl:pt-72;
+}
+
+@utility section-pb {
+  @apply pb-24 md:pb-48 lg:pb-56 xl:pb-64 2xl:pb-72;
+}
+
+@utility section-py {
+  @apply py-24 md:py-48 lg:py-56 xl:py-64 2xl:py-72;
+}
+
+@utility section-mt {
+  @apply mt-24 md:mt-48 lg:mt-56 xl:mt-64 2xl:mt-72;
+}
+
+@utility section-gap {
+  @apply gap-24 md:gap-48 lg:gap-56 xl:gap-64 2xl:gap-72;
+}
+
+/* Titre de page : aligné à droite sur mobile, sur la moitié droite dès md.
+   La marge basse reste au choix de la page. */
+@utility page-title {
+  @apply w-full text-right md:w-1/2 md:ml-auto md:text-left px-4 md:px-0;
+}
+
+/* Apparition du haut de page : léger glissement vers le haut + fondu, une
+   fois au chargement. Rien avec prefers-reduced-motion.
+   motion-fade-up (textes, blocs), motion-fade-in (images, cadres),
+   motion-stagger (enfants d'une liste l'un après l'autre),
+   motion-delay-1 / -2 pour décaler les blocs qui suivent le titre. */
+@keyframes hd-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(var(--distance-enter));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hd-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@utility motion-fade-up {
+  @media (prefers-reduced-motion: no-preference) {
+    animation: hd-fade-up var(--duration-enter) ease-out var(--motion-delay, 0s) both;
+  }
+}
+
+@utility motion-fade-in {
+  @media (prefers-reduced-motion: no-preference) {
+    animation: hd-fade-in var(--duration-enter-slow) ease-out var(--motion-delay, 0s) both;
+  }
+}
+
+@utility motion-stagger {
+  @media (prefers-reduced-motion: no-preference) {
+    & > * {
+      animation: hd-fade-up var(--duration-enter-item) ease-out both;
+    }
+    & > *:nth-child(1) {
+      animation-delay: 0.05s;
+    }
+    & > *:nth-child(2) {
+      animation-delay: 0.12s;
+    }
+    & > *:nth-child(3) {
+      animation-delay: 0.19s;
+    }
+    & > *:nth-child(n + 4) {
+      animation-delay: 0.26s;
+    }
+  }
+}
+
+@utility motion-delay-1 {
+  --motion-delay: 0.08s;
+}
+
+@utility motion-delay-2 {
+  --motion-delay: 0.12s;
 }

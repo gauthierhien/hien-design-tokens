@@ -86,6 +86,45 @@ integrations: [/* ... */, videos()],
 
 Côté site : `pnpm add -D ffmpeg-static`, `ffmpeg-static: true` dans `allowBuilds` (`pnpm-workspace.yaml`), et le script `"videos": "node node_modules/@hien/design-tokens/components/videos.js"` pour tout recompresser à la main. Chaque MP4 est réencodé une fois (H.264, sans son, 1920 px max, faststart).
 
+### Socle partagé (v1.12.0)
+
+```css
+/* src/styles/global.css */
+@import "@hien/design-tokens/theme.css";
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";          /* si prose.css */
+@import "@hien/design-tokens/base.css";    /* h1 à h4, p, li, strong, span mono, ::selection */
+@import "@hien/design-tokens/prose.css";   /* prose-custom (corps MDX) */
+```
+
+```ts
+// src/content.config.ts : jumeaux Zod des singletons Header et Footer
+import { headerDataSchema, footerDataSchema } from "@hien/design-tokens/content";
+const headerData = defineCollection({ loader: glob({ pattern: "index.yaml", base: "./src/content/header-data" }), schema: ({ image }) => headerDataSchema(image) });
+const footerData = defineCollection({ loader: glob({ pattern: "index.yaml", base: "./src/content/footer-data" }), schema: () => footerDataSchema() });
+```
+
+```astro
+<!-- Layout.astro : contenu au-dessus, footer révélé derrière, sans script -->
+<body class="min-h-screen flex flex-col">
+  <PageShell>
+    <Header slot="header" />
+    <slot />
+    <Footer slot="footer" />
+  </PageShell>
+</body>
+
+<!-- 404.astro : même contenu partout -->
+<Layout title="Page not found · Gauthier Hien"><NotFound /></Layout>
+```
+
+- Utilities (`theme.css`) : rythme des sections `section-pt`, `section-pb`, `section-py`, `section-mt`, `section-gap` (24 / 48 / 56 / 64 / 72) ; `page-title` ; apparition `motion-fade-up`, `motion-fade-in`, `motion-stagger`, `motion-delay-1`, `motion-delay-2` (rien avec `prefers-reduced-motion`).
+- Tokens de mouvement : `--ease-out-expo` (classe `ease-out-expo`), `--duration-hover`, `--duration-enter`, `--duration-enter-slow`, `--duration-enter-item`, `--distance-enter`.
+- `@hien/design-tokens/breakpoints` : `BREAKPOINTS`, `mediaUp("md")` pour les scripts.
+- `PageShell.astro` : slots `header`, défaut, `footer`, `background`. Ids `#content-wrapper`, `#footer-track`, `#footer-container` ; `--footer-track-overlap` réglable.
+- `NotFound.astro` : `title`, `body`, `ctaLabel`, `ctaHref`.
+- `CarouselArrows.astro` (`name` → classes `name-prev` / `name-next`) et `SectionText.astro` (paragraphe + « Learn more ») pour les carrousels propres à un site.
+
 Le Footer utilise `MeshBackground` et `Button` ; `meshFixed` fixe son fond au viewport (apps.hien.design).
 - `theme.css` déclare `@source "./components"` : Tailwind génère les classes des composants sans config.
 
@@ -107,3 +146,7 @@ See [DESIGN.md](./DESIGN.md) for machine-readable tokens and brand rationale ([d
 2. Commit, push `main`.
 3. Tag and push: `git tag vX.Y.Z && git push origin vX.Y.Z`
 4. Point apps at the new tag: `pnpm add github:gauthierhien/hien-design-tokens#vX.Y.Z`
+
+## Polices (v1.13.0)
+
+Geist et Geist Mono passent par l'API Fonts d'Astro : `fonts: geistFonts()` (`@hien/design-tokens/fonts`) dans `astro.config`, puis `<Fonts />` (`@hien/design-tokens/Fonts.astro`) en haut du `<head>`. Les fichiers restent dans le site (`@fontsource-variable/geist`, `@fontsource-variable/geist-mono`, sous-ensemble latin). Résultat : préchargement, et une police de secours aux mêmes métriques (Arial, Courier New ajustées), donc plus de saut de la police système vers Geist au chargement. `--font-sans` / `--font-mono` pointent sur `--font-geist` / `--font-geist-mono`. N'importe plus `@fontsource-variable/*` en CSS.

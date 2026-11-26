@@ -1,0 +1,42 @@
+---
+/**
+ * Flèches précédent / suivant rondes d'un carrousel Swiper. Le script du
+ * carrousel les retrouve par leurs classes `${name}-prev` et `${name}-next`.
+ * Grisées quand Swiper les désactive (début ou fin de liste).
+ */
+import { ChevronLeft, ChevronRight } from "@lucide/astro";
+
+export interface Props {
+  /** Préfixe des classes, ex. "hd-carousel" → hd-carousel-prev / -next. */
+  name: string;
+  prevLabel?: string;
+  nextLabel?: string;
+  class?: string;
+}
+
+const {
+  name,
+  prevLabel = "Previous image",
+  nextLabel = "Next image",
+  class: extraClass,
+} = Astro.props;
+const buttonClass =
+  "hd-arrow w-10 h-10 flex items-center justify-center rounded-full bg-background-muted cursor-pointer";
+---
+
+<div class:list={["items-center gap-2 shrink-0", extraClass ?? "flex"]}>
+  <button type="button" class:list={[buttonClass, `${name}-prev`]} aria-label={prevLabel}>
+    <ChevronLeft size={24} stroke-width={1} />
+  </button>
+  <button type="button" class:list={[buttonClass, `${name}-next`]} aria-label={nextLabel}>
+    <ChevronRight size={24} stroke-width={1} />
+  </button>
+</div>
+
+<style>
+  .hd-arrow:global(.swiper-button-disabled) {
+    opacity: 0.3;
+    pointer-events: none;
+    cursor: not-allowed;
+  }
+</style>

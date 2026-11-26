@@ -1,0 +1,75 @@
+---
+/**
+ * Corps de page commun : le contenu passe au-dessus du footer, qui se révèle
+ * derrière lui en fin de scroll. Sans script : le footer est sticky en bas
+ * du viewport dans une piste qui remonte sous la fin du contenu
+ * (--footer-track-overlap, 100vh par défaut). Tout est géré par le
+ * navigateur au scroll.
+ *
+ * Slots : header, défaut (dans <main>), footer, background (calque derrière
+ * le contenu, ex. le crayon du cv).
+ * Ids stables pour les scripts des sites : #content-wrapper, #footer-track,
+ * #footer-container. Un site peut réduire --footer-track-overlap sur
+ * #footer-track (apps le fait sous la fenêtre de son hero).
+ */
+---
+
+<div
+  id="content-wrapper"
+  class="content-wrapper w-full bg-background relative z-10 flex flex-col"
+>
+  <slot name="background" />
+  <slot name="header" />
+  <main class="flex-1">
+    <slot />
+  </main>
+</div>
+
+<div id="footer-track" class="footer-track">
+  <div class="footer-track-spacer" aria-hidden="true"></div>
+  <div id="footer-container">
+    <slot name="footer" />
+  </div>
+</div>
+
+<style is:global>
+  .footer-track {
+    --footer-track-overlap: 100vh;
+    position: relative;
+    z-index: 0;
+    margin-top: calc(-1 * var(--footer-track-overlap));
+    display: flex;
+    flex-direction: column;
+  }
+
+  .footer-track-spacer {
+    flex: none;
+    height: var(--footer-track-overlap);
+  }
+
+  #footer-container {
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+  }
+
+  /* min-height : on peut toujours scroller assez pour révéler tout le
+     footer, même sur une page courte. */
+  .content-wrapper {
+    background-color: var(--background);
+    min-height: 100vh;
+  }
+
+  /* Rideau au-dessus de la page : un fond fixé au viewport (mesh du footer)
+     ne doit pas apparaître pendant le rebond du scroll en haut. */
+  .content-wrapper::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 100%;
+    height: 100vh;
+    background-color: var(--background);
+    pointer-events: none;
+  }
+</style>

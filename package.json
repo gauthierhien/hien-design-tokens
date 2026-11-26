@@ -1,16 +1,20 @@
 {
   "name": "@hien/design-tokens",
-  "version": "1.11.0",
+  "version": "1.13.0",
   "description": "Brand design tokens and shared Astro components for the hien.design sites",
   "license": "MIT",
   "type": "module",
   "files": [
     "theme.css",
+    "base.css",
+    "prose.css",
     "DESIGN.md",
     "components"
   ],
   "exports": {
     "./theme.css": "./theme.css",
+    "./base.css": "./base.css",
+    "./prose.css": "./prose.css",
     "./DESIGN.md": "./DESIGN.md",
     "./Header.astro": "./components/Header.astro",
     "./Footer.astro": "./components/Footer.astro",
@@ -39,7 +43,21 @@
     "./videos": {
       "types": "./components/videos.d.ts",
       "default": "./components/videos.js"
-    }
+    },
+    "./content": "./components/content.ts",
+    "./breakpoints": {
+      "types": "./components/breakpoints.d.ts",
+      "default": "./components/breakpoints.js"
+    },
+    "./fonts": {
+      "types": "./components/fonts.d.ts",
+      "default": "./components/fonts.js"
+    },
+    "./Fonts.astro": "./components/Fonts.astro",
+    "./NotFound.astro": "./components/NotFound.astro",
+    "./PageShell.astro": "./components/PageShell.astro",
+    "./CarouselArrows.astro": "./components/CarouselArrows.astro",
+    "./SectionText.astro": "./components/SectionText.astro"
   },
   "repository": {
     "type": "git",

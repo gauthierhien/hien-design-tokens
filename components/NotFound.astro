@@ -1,0 +1,39 @@
+---
+/**
+ * Contenu de la page 404, identique sur tous les sites : titre, phrase et
+ * bouton de retour, avec l'apparition du haut de page. Le Layout reste celui
+ * du site (le cv y ajoute son fond au crayon).
+ */
+import Button from "./Button.astro";
+
+export interface Props {
+  title?: string;
+  body?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+}
+
+const {
+  title = "Page not found",
+  body = "This page doesn't exist, or it has moved.",
+  ctaLabel = "Back to the homepage",
+  ctaHref = "/",
+} = Astro.props;
+---
+
+<div class="section-pb">
+  <section>
+    <h1 class="page-title mb-8 md:mb-10 motion-fade-up">{title}</h1>
+    <p
+      class="page-title text-lead text-muted leading-snug mb-8 md:mb-10 motion-fade-up motion-delay-1"
+    >
+      {body}
+    </p>
+  </section>
+
+  <section class="px-4 w-full page-grid motion-fade-up motion-delay-2">
+    <div class="page-grid-content">
+      <Button href={ctaHref} label={ctaLabel} />
+    </div>
+  </section>
+</div>

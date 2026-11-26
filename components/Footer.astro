@@ -29,8 +29,9 @@ export interface Props {
   /** Adresse du bouton : mailto:ctaEmail par défaut, ou ctaHref s'il est fourni. */
   ctaEmail?: string | null;
   ctaHref?: string | null;
-  /** Liens du CMS, dans un second groupe sous la navigation entre les sites. */
-  navLinks?: Link[] | null;
+  /** Liens du CMS, dans un second groupe sous la navigation entre les sites.
+      Un lien sans libellé ou sans adresse est ignoré. */
+  navLinks?: { label?: string | null; href?: string | null }[] | null;
   /** Les liens http s'ouvrent dans un nouvel onglet. */
   externalInNewTab?: boolean;
   credit?: string | null;
@@ -90,10 +91,12 @@ const internalLinks: Link[] = showSiteNav
 // Avec la navigation entre sites, un lien du CMS vers l'accueil d'un site ferait doublon.
 const links: Link[] = [
   ...(homeLink ? [{ label: "Home", href: "/" }] : []),
-  ...(navLinks || [
-    { label: "LinkedIn", href: "https://www.linkedin.com/in/gauthierhien/" },
-    { label: "Mail", href: "mailto:gauthier@hien.design" },
-  ]),
+  ...(navLinks
+    ? navLinks.filter((link): link is Link => Boolean(link?.label && link?.href))
+    : [
+        { label: "LinkedIn", href: "https://www.linkedin.com/in/gauthierhien/" },
+        { label: "Mail", href: "mailto:gauthier@hien.design" },
+      ]),
 ].filter((link) => !isCurrent(link.href) && !(showSiteNav && isSiteLink(link.href)));
 ---
 
@@ -242,8 +245,8 @@ const links: Link[] = [
   .footer-heading-rest {
     color: var(--foreground-muted);
     transition:
-      color 0.3s ease,
-      opacity 0.3s ease;
+      color var(--duration-hover) ease,
+      opacity var(--duration-hover) ease;
   }
 
   .footer-root:has(.footer-cta-btn:hover) .footer-heading-rest,
@@ -254,7 +257,7 @@ const links: Link[] = [
   }
 
   .footer-cta-container {
-    transition: border-color 0.3s ease; /* Ajout pour la fluidité */
+    transition: border-color var(--duration-hover) ease; /* Ajout pour la fluidité */
   }
 
   .footer-root:has(.footer-cta-btn:hover) .footer-cta-container,
@@ -265,7 +268,7 @@ const links: Link[] = [
 
   /* 2. Changement de couleur des textes "muted" (Product Designer Info) */
   .text-muted {
-    transition: color 0.3s ease; /* Ajout pour la fluidité */
+    transition: color var(--duration-hover) ease; /* Ajout pour la fluidité */
   }
 
   /* On cible spécifiquement les éléments .text-muted quand le root est activé */
