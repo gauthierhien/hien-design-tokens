@@ -162,9 +162,11 @@ Sizes follow the portfolio ladder at `md` / `lg` / `xl` / `2xl` (e.g. `h1` is
 2.25rem → 6rem). Use `text-body` on UI copy and `text-body-prose` on article
 bodies (steps up at `md`/`lg`). Hero `.display` in apps maps to `text-h1`.
 
-Element selectors (`h1`, `span` = mono label, `@layer base`) live in each app —
-consume the tokens there, do not re-declare the rem ladder. Consuming apps must
-load fonts themselves (`@fontsource-variable/geist` and the mono package).
+Element selectors (`h1` to `h4`, `p`, `li`, `strong`, `span` = mono label,
+`::selection`) ship in `base.css` (`@layer base`), the article style
+(`prose-custom`) in `prose.css`. Sites import them after Tailwind and keep only
+their own additions. Consuming apps must load fonts themselves
+(`@fontsource-variable/geist` and the mono package).
 
 ## Layout
 
@@ -180,8 +182,23 @@ Utility-first Tailwind, one page grid shared by every site and shipped in
   2xl:col-span-4` for the footer CTA, `md:grid-cols-6 2xl:grid-cols-8` for
   carousel headers).
 
-Major sections get generous vertical air. No decorative cards: no
+Major sections get generous vertical air, always the same rhythm: 24, 48,
+56, 64, 72 (Tailwind units, mobile to `2xl`), via `section-pt`, `section-pb`,
+`section-py`, `section-mt`, `section-gap`. Page titles use `page-title`
+(right-aligned on mobile, right half from `md`). No decorative cards: no
 multi-layer shadows, no pill clusters, no glow effects.
+
+## Motion
+
+Quiet and the same on every site. The top of each page (title, intro, first
+block) enters once on load: a 12px upward slide with a fade (`motion-fade-up`,
+0.7s ease-out), images and frames fade in (`motion-fade-in`, 0.9s), lists
+enter one item after the other (`motion-stagger`). Blocks after the title are
+offset with `motion-delay-1` (0.08s) and `motion-delay-2` (0.12s). Nothing
+animates with `prefers-reduced-motion`. Hovers use `--duration-hover` (0.3s);
+the lightbox slides on `--ease-out-expo`. The mesh background is the only
+continuous animation. Scripts read breakpoints from
+`@hien/design-tokens/breakpoints`.
 
 ## Elevation & Depth
 
@@ -197,7 +214,9 @@ minimal radius. Lucide icons: `stroke-width={1}`, colors via CSS vars
 ## Components
 
 Header and Footer ship as Astro components (skeleton here, content via props
-from each site's Keystatic). The rest is guidance: component CSS lives in each app.
+from each site's Keystatic): same structure everywhere, texts vary per site. The
+page body (`PageShell`: content above, footer revealed behind it without
+script) and the 404 content (`NotFound`) are shared too.
 
 - **Primary button** — `foreground` fill on `background` text; hover via opacity.
 - **Secondary button** — `background-muted` fill.
@@ -221,5 +240,5 @@ from each site's Keystatic). The rest is guidance: component CSS lives in each a
 
 - Invent a purple/indigo palette, generic cream + terracotta look, or dense broadsheet layout.
 - Turn dark mode on for a site without asking; ship glows, multi-shadows, or UI emojis.
-- Put content images, font files, layout utilities, or page-specific component CSS in this package.
+- Put content images, font files, or page-specific component CSS in this package.
 - Hardcode duplicate tokens in apps once this package is wired (including LED green as `#22c55e`).

@@ -1,0 +1,52 @@
+---
+import Docs from "../layouts/Docs.astro";
+import Demo from "../components/Demo.astro";
+---
+
+<Docs
+  title="Motion and spacing"
+  lead="The top of every page fades in with a short upward slide, once, on load. Nothing moves with reduced motion. Sections share one vertical rhythm."
+>
+  <Demo
+    label="Page entrance"
+    code={`<h1 class="page-title mb-8 md:mb-10 motion-fade-up">Title</h1>
+<p class="page-title motion-fade-up motion-delay-1">Intro</p>
+<div class="motion-fade-up motion-delay-2">First block</div>
+<img class="motion-fade-in" />          <!-- images, frames -->
+<ul class="motion-stagger">…</ul>     <!-- one item after the other -->`}
+  >
+    <div class="flex flex-col gap-4">
+      <h2 class="mb-0 motion-fade-up">Title</h2>
+      <p class="motion-fade-up motion-delay-1">Intro, 0.08s later.</p>
+      <ul class="motion-stagger grid grid-cols-2 md:grid-cols-4 gap-1">
+        <li class="bg-background-muted p-4">One</li>
+        <li class="bg-background-muted p-4">Two</li>
+        <li class="bg-background-muted p-4">Three</li>
+        <li class="bg-background-muted p-4">Four</li>
+      </ul>
+    </div>
+  </Demo>
+  <Demo
+    label="Motion tokens"
+    code={`--ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);  /* lightbox, class ease-out-expo */
+--duration-hover: 0.3s;        /* buttons, footer */
+--duration-enter: 0.7s;        /* motion-fade-up */
+--duration-enter-slow: 0.9s;   /* motion-fade-in */
+--duration-enter-item: 0.55s;  /* motion-stagger */
+--distance-enter: 12px;`}
+  />
+  <Demo
+    label="Section rhythm (24 / 48 / 56 / 64 / 72)"
+    code={`section-pt  section-pb  section-py  section-mt  section-gap
+page-title   /* right-aligned on mobile, right half from md */`}
+  >
+    <div class="bg-background-muted section-py px-4">
+      <p class="mb-0">section-py</p>
+    </div>
+  </Demo>
+  <Demo
+    label="Breakpoints in scripts"
+    code={`import { BREAKPOINTS, mediaUp } from "@hien/design-tokens/breakpoints";
+window.matchMedia(mediaUp("md"));  // (min-width: 768px)`}
+  />
+</Docs>

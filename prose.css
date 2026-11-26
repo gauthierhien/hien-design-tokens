@@ -1,0 +1,53 @@
+/**
+ * @hien/design-tokens : typographie d'article (corps MDX des projets).
+ * Requiert @tailwindcss/typography :
+ *   @plugin "@tailwindcss/typography";
+ *   @import "@hien/design-tokens/prose.css";
+ * Classe : prose-custom.
+ */
+
+@utility prose-custom {
+  @apply prose max-w-none font-sans;
+
+  --tw-prose-body: var(--foreground);
+  --tw-prose-headings: var(--foreground);
+  --tw-prose-links: var(--accent);
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply text-balance leading-none;
+  }
+
+  h1 {
+    @apply font-medium tracking-tighter text-h1;
+  }
+
+  h2 {
+    @apply font-medium tracking-tighter mb-6 text-h2;
+    margin-top: 2em;
+  }
+
+  h3 {
+    @apply font-medium tracking-tighter mb-2 text-h3;
+    margin-top: 1.5em;
+  }
+
+  h4 {
+    @apply font-normal tracking-tight mb-2 text-h4;
+  }
+
+  strong {
+    @apply text-body-prose font-semibold tracking-tight;
+  }
+
+  p,
+  li {
+    @apply text-body-prose font-normal tracking-tight;
+  }
+
+  span {
+    @apply font-mono text-xs xl:text-sm font-light;
+  }
+}

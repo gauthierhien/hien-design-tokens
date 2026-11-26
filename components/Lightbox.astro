@@ -131,7 +131,7 @@ const { id, images } = Astro.props;
     width: 100%;
     height: calc(100dvh - 88px);
     /* Défilement : transform 0.6s (speed) sur cette courbe. */
-    --swiper-wrapper-transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    --swiper-wrapper-transition-timing-function: var(--ease-out-expo);
   }
 
   .lightbox-swiper .swiper-wrapper {

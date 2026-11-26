@@ -1,17 +1,20 @@
 ---
 /**
  * Paragraphe d'un SectionHeader, suivi du lien optionnel (souligné, comme
- * « Learn more » sur apps.hien.design). Brique interne, non exportée.
+ * « Learn more » sur apps.hien.design). Utilisé par SectionHeader, exporté
+ * pour les en-têtes de section propres à un site.
  */
 export interface Props {
   body?: string | null;
   href?: string | null;
-  label: string;
+  /** Défaut : « Learn more ». */
+  label?: string | null;
   ariaLabel?: string | null;
   target?: string | null;
 }
 
 const { body, href, label, ariaLabel, target } = Astro.props;
+const linkLabel = label || "Learn more";
 ---
 
 <p class="max-w-2xl">
@@ -27,7 +30,7 @@ const { body, href, label, ariaLabel, target } = Astro.props;
           aria-label={ariaLabel || undefined}
           class="hd-section-link whitespace-nowrap underline decoration-1 underline-offset-[0.2em] transition-opacity duration-200 hover:opacity-60"
         >
-          {label}
+          {linkLabel}
         </a>
       </>
     )

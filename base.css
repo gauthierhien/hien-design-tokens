@@ -1,0 +1,62 @@
+/**
+ * @hien/design-tokens : styles de base communs aux sites hien.design.
+ * À importer après Tailwind :
+ *   @import "@hien/design-tokens/theme.css";
+ *   @import "tailwindcss";
+ *   @import "@hien/design-tokens/base.css";
+ *
+ * Convention de marque : titres serrés, <span> en mono petit (labels,
+ * métadonnées, heures), sélection en couleur d'accent.
+ */
+
+@layer base {
+  html {
+    @apply text-base bg-background text-foreground antialiased font-sans;
+  }
+
+  body {
+    @apply min-h-screen flex flex-col;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply text-balance leading-none;
+  }
+
+  h1 {
+    @apply font-medium tracking-tighter text-h1;
+  }
+
+  h2 {
+    @apply font-medium tracking-tighter mb-6 text-h2;
+  }
+
+  h3 {
+    @apply font-medium tracking-tighter mb-2 text-h3;
+  }
+
+  h4 {
+    @apply font-normal tracking-tight mb-2 text-h4;
+  }
+
+  strong {
+    @apply text-strong font-semibold tracking-tight;
+  }
+
+  p,
+  li {
+    @apply text-body font-normal tracking-tight;
+  }
+
+  span {
+    @apply font-mono text-label font-light;
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--foreground);
+    text-shadow: none;
+  }
+}

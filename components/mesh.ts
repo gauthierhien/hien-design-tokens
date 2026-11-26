@@ -4,12 +4,13 @@ import {
   meshGradientFragmentShader,
   type PaperShaderElement,
 } from "@paper-design/shaders";
+import { mediaUp } from "./breakpoints.js";
 
 type Rgba = [number, number, number, number];
 
 const SPEED = 0.45;
 const FADE_MS = 1100;
-const DESKTOP = "(min-width: 768px)";
+const DESKTOP = mediaUp("md");
 const REDUCED = "(prefers-reduced-motion: reduce)";
 const STATE_KEY = "__hienMesh";
 
