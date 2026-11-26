@@ -17,16 +17,16 @@ import { getEntry } from "astro:content";
 import Header from "@hien/design-tokens/Header.astro";
 const header = await getEntry("header-data", "index");
 ---
-<Header currentSite="feed" tagline={header?.data?.tagline} />`}
+<Header currentSite="playground" tagline={header?.data?.tagline} />`}
   >
     <div class="border-y border-border overflow-hidden">
       <Header currentSite="home" tagline="Design Engineer" />
     </div>
   </Demo>
   <Demo
-    label="Footer · hien.design, feed and cv (navigation between sites, Paris time)"
+    label="Footer · hien.design, playground and cv (navigation between sites, Paris time)"
     bleed
-    code={`<Footer currentSite="feed" {...footer?.data} />`}
+    code={`<Footer currentSite="playground" {...footer?.data} />`}
   >
     <Footer
       currentSite="home"
@@ -42,7 +42,7 @@ const header = await getEntry("header-data", "index");
     <ul class="divide-y divide-border border-y border-border">
       {
         [
-          ["currentSite", "home, feed, apps or cv: logo link and navigation between sites (Portfolio, Playground, Indie Apps, CV)."],
+          ["currentSite", "home, playground, apps or cv: logo link and navigation between sites (Portfolio, Playground, Indie Apps, CV)."],
           ["heading", "A \"?\" splits the heading; the rest goes grey on a second line."],
           ["ctaEmail, ctaHref", "Button target; hovering shows the email address."],
           ["isAvailable", "Unchecked: the availability line is hidden."],
