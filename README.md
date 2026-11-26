@@ -64,7 +64,27 @@ Autres composants (v1.4.0) :
 | `Lightbox.astro` | Visionneuse plein écran | `id`, `images` |
 | `Thumbnail.astro` | Vignette d'image sur fond muted (brique de base) | `image`, `alt`, `aspect` (`square`, `video`, `wide`), `padding` (`15%`, `3rem`, `none`), `href` |
 | `Carousel.astro` | Section carrousel Swiper : SectionHeader + flèches, slides en ImageWide | `items` (`image`, `title`, `link`), `tag`, `heading`, `body`, `link` |
+| `LoopVideo.astro` | MP4 muet en boucle à la place d'une image (poster = l'image), chargé à l'approche du viewport, en pause hors écran, sans autoplay avec `prefers-reduced-motion` (poster + contrôles) | `src`, `poster`, `label`, `eager`, `class` |
 | `MeshBackground.astro` | Fond animé (shader mesh, grain), sombre ou clair, effet arc-en-ciel ou halo (`spotlight` : mêmes couleurs, révélées autour du pointeur, sans déclencheur) | `tone` (`dark`, `light`), `effect` (`rainbow`, `spotlight`), `pose` (0 à 2), `fixed`, `blackGrain` ; parent `[data-mesh-root]`, déclencheurs `[data-mesh-trigger]` (la racine peut l'être elle-même) |
+
+### Vidéos en boucle (v1.9.0)
+
+`Thumbnail`, `ImageWide`, `ImageSquare`, `SectionImageWide`, `SectionImageGrid` (items), `Carousel` (items) et `Lightbox` (images) acceptent une prop `video` optionnelle : le chemin public d'un MP4. Il remplace l'image, qui devient son poster, dans le même cadre (fit, padding, ratio). Sans `video`, rien ne change. Même comportement que sur apps.hien.design.
+
+```ts
+// keystatic.config.ts : MP4 rangé dans public/videos/<folder>
+import { loopVideoField } from "@hien/design-tokens/keystatic";
+video: loopVideoField("Video (MP4)", { folder: "projects" }),
+
+// src/content.config.ts
+video: z.string().nullable().optional(),
+
+// astro.config.ts : compression en dev, build refusé au-delà de 8 Mo
+import videos from "@hien/design-tokens/videos";
+integrations: [/* ... */, videos()],
+```
+
+Côté site : `pnpm add -D ffmpeg-static`, `ffmpeg-static: true` dans `allowBuilds` (`pnpm-workspace.yaml`), et le script `"videos": "node node_modules/@hien/design-tokens/components/videos.js"` pour tout recompresser à la main. Chaque MP4 est réencodé une fois (H.264, sans son, 1920 px max, faststart).
 
 Le Footer utilise `MeshBackground` et `Button` ; `meshFixed` fixe son fond au viewport (apps.hien.design).
 - `theme.css` déclare `@source "./components"` : Tailwind génère les classes des composants sans config.

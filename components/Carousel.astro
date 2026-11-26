@@ -15,6 +15,8 @@ import ImageWide from "./ImageWide.astro";
 
 export interface CarouselItem {
   image: ImageMetadata | null;
+  /** MP4 muet en boucle à la place de l'image (qui devient son poster). */
+  video?: string | null;
   title?: string | null;
   description?: string | null;
   link?: string | null;
@@ -33,8 +35,7 @@ export interface Props {
 const { items: rawItems, tag, heading, body, link, class: extraClass } = Astro.props;
 const items =
   rawItems?.filter(
-    (item): item is CarouselItem & { image: ImageMetadata } =>
-      item?.image != null,
+    (item): item is CarouselItem => item?.image != null || Boolean(item?.video),
   ) || [];
 ---
 
@@ -79,6 +80,7 @@ const items =
           >
             <ImageWide
               image={item.image}
+              video={item.video}
               alt={item.title || `${heading || "Gallery"} - Image ${index + 1}`}
               padding="3rem"
               caption={item.title}

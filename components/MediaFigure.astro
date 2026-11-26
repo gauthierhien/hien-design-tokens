@@ -10,7 +10,9 @@ import type { ImageMetadata } from "astro";
 import Thumbnail from "./Thumbnail.astro";
 
 export interface Props {
-  image: ImageMetadata;
+  image?: ImageMetadata | null;
+  /** MP4 muet en boucle à la place de l'image (qui devient son poster). */
+  video?: string | null;
   alt?: string | null;
   aspect: "square" | "video" | "wide";
   /** contain : image entière avec de l'air autour ; cover : remplit le cadre. */
@@ -29,6 +31,7 @@ export interface Props {
 
 const {
   image,
+  video,
   alt,
   aspect,
   fit = "contain",
@@ -59,6 +62,7 @@ const Wrapper = href ? "a" : lightbox ? "button" : "div";
   >
     <Thumbnail
       image={image}
+      video={video}
       alt={label}
       aspect={aspect}
       padding={fit === "cover" ? "none" : padding}

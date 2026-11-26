@@ -1,6 +1,6 @@
 {
   "name": "@hien/design-tokens",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "description": "Brand design tokens and shared Astro components for the hien.design sites",
   "license": "MIT",
   "type": "module",
@@ -34,7 +34,12 @@
     "./SectionHeader.astro": "./components/SectionHeader.astro",
     "./SectionImageWide.astro": "./components/SectionImageWide.astro",
     "./SectionImageGrid.astro": "./components/SectionImageGrid.astro",
-    "./Lightbox.astro": "./components/Lightbox.astro"
+    "./Lightbox.astro": "./components/Lightbox.astro",
+    "./LoopVideo.astro": "./components/LoopVideo.astro",
+    "./videos": {
+      "types": "./components/videos.d.ts",
+      "default": "./components/videos.js"
+    }
   },
   "repository": {
     "type": "git",
@@ -55,13 +60,17 @@
     "@keystatic/core": ">=0.5",
     "@lucide/astro": ">=1",
     "@paper-design/shaders": ">=0.0.81",
-    "swiper": ">=11"
+    "swiper": ">=11",
+    "ffmpeg-static": ">=5"
   },
   "peerDependenciesMeta": {
     "swiper": {
       "optional": true
     },
     "@keystatic/core": {
+      "optional": true
+    },
+    "ffmpeg-static": {
       "optional": true
     }
   }
