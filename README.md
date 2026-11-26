@@ -45,9 +45,9 @@ const footer = await getEntry("footer-data", "index");
 <Footer currentSite="feed" {...footer?.data} />
 ```
 
-- `currentSite` (`home`, `feed`, `cv`) : le logo et la navigation entre sites pointent en relatif vers le site courant, en absolu vers les autres (`@hien/design-tokens/sites`).
+- `currentSite` (`home`, `feed`, `apps`, `cv`) : le logo et la navigation entre sites pointent en relatif vers le site courant, en absolu vers les autres (`@hien/design-tokens/sites`).
 - Header : `tagline`, `logo` (image du CMS) ou `logoSrc` (défaut `/gauthier-hien-logo.svg`), `logoAlt`, `logoHref`.
-- Footer : `availabilityLabel`, `isAvailable` (décoché : ligne masquée), `heading` (un « ? » coupe le titre, la suite passe en gris), `ctaLabel`, `ctaEmail` ou `ctaHref`, `navLinks`, `credit`. Options de structure : `showSiteNav` (navigation News, Work, About), `homeLink` (lien Home en tête), `externalInNewTab`, `showTime` (heure de Paris), `meshFixed` (fond fixé au viewport). Slot `background` : remplace le mesh par un autre calque, sur le même fond noir. Les liens relatifs vers la page courante sont masqués.
+- Footer : `availabilityLabel`, `isAvailable` (décoché : ligne masquée), `heading` (un « ? » coupe le titre, la suite passe en gris), `ctaLabel`, `ctaEmail` ou `ctaHref`, `navLinks`, `credit`. Options de structure : `showSiteNav` (navigation Portfolio, Playground, Indie Apps, CV ; les `navLinks` du CMS, LinkedIn et Mail par défaut, forment un second groupe en dessous, sans doublon vers l'accueil d'un site), `homeLink` (lien Home en tête des liens du CMS), `externalInNewTab`, `showTime` (heure de Paris), `meshFixed` (fond fixé au viewport). Slot `background` : remplace le mesh par un autre calque, sur le même fond noir. Les liens relatifs vers la page courante sont masqués.
 - Peer dependencies côté site : `astro`, `@keystatic/core`, `@lucide/astro`, `@paper-design/shaders`, `swiper` (pour le Carousel).
 
 Autres composants (v1.4.0) :

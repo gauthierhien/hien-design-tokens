@@ -7,16 +7,16 @@
  * meshFixed : le fond animé couvre tout le viewport (voir MeshBackground).
  * Slot background : remplace le mesh (cv.hien.design), sur le même fond noir.
  */
-import { siteHref, siteNav, type SiteKey } from "./sites.js";
+import { SITES, siteHref, siteNav, type SiteKey } from "./sites.js";
 import MeshBackground from "./MeshBackground.astro";
 import Button from "./Button.astro";
 
 type Link = { label: string; href: string };
 
 export interface Props {
-  /** Site qui affiche le footer : son lien dans la navigation entre sites est masqué. */
+  /** Site qui affiche le footer : son lien pointe sur "/" et reste masqué sur l'accueil. */
   currentSite?: SiteKey;
-  /** Affiche la navigation entre les sites (News, Work, About). */
+  /** Affiche la navigation entre les sites (Portfolio, Playground, Indie Apps, CV). */
   showSiteNav?: boolean;
   /** Ajoute un lien Home vers "/" en tête de liste (masqué sur la page d'accueil). */
   homeLink?: boolean;
@@ -29,7 +29,7 @@ export interface Props {
   /** Adresse du bouton : mailto:ctaEmail par défaut, ou ctaHref s'il est fourni. */
   ctaEmail?: string | null;
   ctaHref?: string | null;
-  /** Liens du CMS, affichés après la navigation entre les sites. */
+  /** Liens du CMS, dans un second groupe sous la navigation entre les sites. */
   navLinks?: Link[] | null;
   /** Les liens http s'ouvrent dans un nouvel onglet. */
   externalInNewTab?: boolean;
@@ -79,21 +79,22 @@ const isCurrent = (target: string) => {
     ? currentPath === "/"
     : currentPath === path || currentPath.startsWith(`${path}/`);
 };
+const siteRoots = Object.values(SITES);
+const isSiteLink = (href: string) =>
+  siteRoots.some((root) => href.replace(/\/+$/, "") === root);
+const internalLinks: Link[] = showSiteNav
+  ? siteNav
+      .map((link) => ({ label: link.label, href: siteHref(link.site, currentSite) }))
+      .filter((link) => !isCurrent(link.href))
+  : [];
+// Avec la navigation entre sites, un lien du CMS vers l'accueil d'un site ferait doublon.
 const links: Link[] = [
   ...(homeLink ? [{ label: "Home", href: "/" }] : []),
   ...(navLinks || [
-    { label: "Apps", href: "https://apps.hien.design/" },
     { label: "LinkedIn", href: "https://www.linkedin.com/in/gauthierhien/" },
-    { label: "Email", href: "mailto:gauthier@hien.design" },
+    { label: "Mail", href: "mailto:gauthier@hien.design" },
   ]),
-].filter((link) => !isCurrent(link.href));
-
-const onErrorPage = Astro.url.pathname.startsWith("/404");
-const internalLinks = showSiteNav
-  ? siteNav
-      .filter((link) => link.site !== currentSite || onErrorPage)
-      .map((link) => ({ label: link.label, href: siteHref(link.site, currentSite) }))
-  : [];
+].filter((link) => !isCurrent(link.href) && !(showSiteNav && isSiteLink(link.href)));
 ---
 
 <footer class="footer-root theme-dark text-foreground p-4" data-mesh-root>
@@ -165,24 +166,36 @@ const internalLinks = showSiteNav
 
         <!-- Navigation -->
         <nav class="flex-1 flex flex-col gap-2" aria-label="Footer">
-          {internalLinks.map((link) => (
-            <a href={link.href} class="font-mono text-xs md:text-sm">
-              {link.label}
-            </a>
-          ))}
-          {links.map((link) => {
-            const newTab = externalInNewTab && link.href.startsWith("http");
-            return (
-              <a
-                href={link.href}
-                target={newTab ? "_blank" : "_self"}
-                rel="noopener noreferrer"
-                class="font-mono text-xs md:text-sm"
-              >
-                {link.label}
-              </a>
-            );
-          })}
+          {internalLinks.length > 0 && (
+            <ul class="flex flex-col gap-2">
+              {internalLinks.map((link) => (
+                <li>
+                  <a href={link.href} class="font-mono text-xs md:text-sm">
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+          {links.length > 0 && (
+            <ul class="flex flex-col gap-2">
+              {links.map((link) => {
+                const newTab = externalInNewTab && link.href.startsWith("http");
+                return (
+                  <li>
+                    <a
+                      href={link.href}
+                      target={newTab ? "_blank" : "_self"}
+                      rel="noopener noreferrer"
+                      class="font-mono text-xs md:text-sm"
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
         </nav>
       </div>
     </div>
