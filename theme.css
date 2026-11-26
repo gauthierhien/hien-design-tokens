@@ -239,13 +239,13 @@
 
 @utility motion-fade-up {
   @media (prefers-reduced-motion: no-preference) {
-    animation: hd-fade-up var(--duration-enter) ease-out both;
+    animation: hd-fade-up var(--duration-enter) ease-out var(--motion-delay, 0s) both;
   }
 }
 
 @utility motion-fade-in {
   @media (prefers-reduced-motion: no-preference) {
-    animation: hd-fade-in var(--duration-enter-slow) ease-out both;
+    animation: hd-fade-in var(--duration-enter-slow) ease-out var(--motion-delay, 0s) both;
   }
 }
 
@@ -270,9 +270,9 @@
 }
 
 @utility motion-delay-1 {
-  animation-delay: 0.08s;
+  --motion-delay: 0.08s;
 }
 
 @utility motion-delay-2 {
-  animation-delay: 0.12s;
+  --motion-delay: 0.12s;
 }
