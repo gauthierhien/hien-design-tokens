@@ -32,8 +32,8 @@ const header = await getEntry("header-data", "index");
       currentSite="home"
       heading="What will we ship together?"
       navLinks={[
-        { label: "GitHub", href: "https://github.com/gauthierhien/hien-design-tokens" },
-        { label: "hien.design", href: "https://hien.design" },
+        { label: "LinkedIn", href: "https://www.linkedin.com/in/gauthierhien/" },
+        { label: "Mail", href: "mailto:gauthier@hien.design" },
       ]}
     />
   </Demo>
@@ -42,11 +42,11 @@ const header = await getEntry("header-data", "index");
     <ul class="divide-y divide-border border-y border-border">
       {
         [
-          ["currentSite", "home, feed or cv: logo link and navigation between sites."],
+          ["currentSite", "home, feed, apps or cv: logo link and navigation between sites (Portfolio, Playground, Indie Apps, CV)."],
           ["heading", "A \"?\" splits the heading; the rest goes grey on a second line."],
           ["ctaEmail, ctaHref", "Button target; hovering shows the email address."],
           ["isAvailable", "Unchecked: the availability line is hidden."],
-          ["showSiteNav, homeLink, externalInNewTab, showTime", "Navigation structure (apps: no navigation between sites, a Home link, no time)."],
+          ["showSiteNav, homeLink, externalInNewTab, showTime", "Navigation structure. The CMS links (LinkedIn, Mail by default) form a second group below the sites."],
           ["meshFixed", "The animated background covers the whole viewport (apps)."],
         ].map(([k, v]) => (
           <li class="grid grid-cols-1 md:grid-cols-8 gap-2 md:gap-4 py-4">
