@@ -3,14 +3,16 @@
  * Section avec une image large (carrée sur mobile, 16:9 dès md) et un
  * en-tête optionnel (badge, titre, texte), dessous par défaut ou dessus.
  * Module A du portfolio, sections de captures d'apps. link : lien
- * « Learn more » vers une page détail, à la suite du texte.
+ * « Learn more » vers une page détail, à la suite du texte. Sans image ni
+ * vidéo, le cadre reste en place, vide, sur le fond gris léger des vignettes
+ * (projet confidentiel, visuel à venir).
  */
 import type { ImageMetadata } from "astro";
 import ImageWide from "./ImageWide.astro";
 import SectionHeader, { type SectionLink } from "./SectionHeader.astro";
 
 export interface Props {
-  image: ImageMetadata | null;
+  image?: ImageMetadata | null;
   /** MP4 muet en boucle à la place de l'image (qui devient son poster). */
   video?: string | null;
   alt?: string | null;
@@ -46,19 +48,15 @@ const header = { tag, heading, body, link };
 
 <section class:list={["flex flex-col gap-4 md:gap-8 px-4", extraClass]}>
   {headerPosition === "before" && <SectionHeader {...header} />}
-  {
-    (image || video) && (
-      <ImageWide
-        image={image}
-        video={video}
-        alt={alt || heading || "Image"}
-        fit={fit}
-        padding="3rem"
-        caption={caption}
-        href={href}
-        class:list={[headerPosition === "after" && "mb-4 md:mb-8"]}
-      />
-    )
-  }
+  <ImageWide
+    image={image}
+    video={video}
+    alt={image || video ? alt || heading || "Image" : ""}
+    fit={fit}
+    padding="3rem"
+    caption={caption}
+    href={href}
+    class:list={[headerPosition === "after" && "mb-4 md:mb-8"]}
+  />
   {headerPosition === "after" && <SectionHeader {...header} />}
 </section>
