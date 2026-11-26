@@ -10,6 +10,10 @@
  * link : lien souligné à la suite du paragraphe (« Learn more » par défaut),
  * vers la page détail d'un projet ou d'une app, comme sur apps.hien.design.
  * Sans link, le rendu ne change pas.
+ *
+ * details : lignes libellé / valeur sous le texte (ex. Judgment, Leverage,
+ * Proof sur hien.design). placeholder : valeur encore à écrire, affichée
+ * dans un cadre gris en pointillé. Sans details, le rendu ne change pas.
  */
 import Tag from "./Tag.astro";
 import SectionText from "./SectionText.astro";
@@ -23,16 +27,26 @@ export interface SectionLink {
   target?: string | null;
 }
 
+export interface SectionDetail {
+  label?: string | null;
+  value?: string | null;
+  placeholder?: boolean;
+}
+
 export interface Props {
   tag?: string | null;
   heading?: string | null;
   body?: string | null;
   bleed?: boolean;
   link?: SectionLink | null;
+  details?: (SectionDetail | null)[] | null;
   class?: string;
 }
 
-const { tag, heading, body, bleed = false, link, class: extraClass } = Astro.props;
+const { tag, heading, body, bleed = false, link, details: rawDetails, class: extraClass } = Astro.props;
+const details = (rawDetails ?? []).filter(
+  (detail): detail is SectionDetail => Boolean(detail?.label && detail?.value),
+);
 const hasAside = Astro.slots.has("aside");
 const textProps = {
   body,
@@ -42,7 +56,7 @@ const textProps = {
   target: link?.target,
 };
 const text = body || textProps.href;
-const show = tag || heading || text || hasAside;
+const show = tag || heading || text || hasAside || details.length > 0;
 ---
 
 {
@@ -65,7 +79,30 @@ const show = tag || heading || text || hasAside;
         ) : (
           text && <SectionText {...textProps} />
         )}
+        {details.length > 0 && (
+          <dl class="hd-section-details max-w-2xl mt-6 md:mt-8 border-b border-border">
+            {details.map((detail) => (
+              <div class="grid grid-cols-[6.5rem_1fr] md:grid-cols-[8rem_1fr] gap-4 py-3 border-t border-border">
+                <dt>
+                  <span>{detail.label}</span>
+                </dt>
+                <dd class="m-0">
+                  <p class:list={[detail.placeholder && "hd-placeholder"]}>{detail.value}</p>
+                </dd>
+              </div>
+            ))}
+          </dl>
+        )}
       </div>
     </div>
   )
 }
+
+<style>
+  .hd-placeholder {
+    display: inline-block;
+    padding: 0.125rem 0.5rem;
+    border: 1px dashed var(--foreground-muted);
+    color: var(--foreground);
+  }
+</style>

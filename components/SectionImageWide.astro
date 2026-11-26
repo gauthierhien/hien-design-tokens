@@ -7,7 +7,7 @@
  */
 import type { ImageMetadata } from "astro";
 import ImageWide from "./ImageWide.astro";
-import SectionHeader, { type SectionLink } from "./SectionHeader.astro";
+import SectionHeader, { type SectionDetail, type SectionLink } from "./SectionHeader.astro";
 
 export interface Props {
   image: ImageMetadata | null;
@@ -23,6 +23,8 @@ export interface Props {
   body?: string | null;
   /** Lien « Learn more » après le texte (page détail). */
   link?: SectionLink | null;
+  /** Lignes libellé / valeur sous le texte (voir SectionHeader). */
+  details?: (SectionDetail | null)[] | null;
   headerPosition?: "before" | "after";
   class?: string;
 }
@@ -38,10 +40,11 @@ const {
   heading,
   body,
   link,
+  details,
   headerPosition = "after",
   class: extraClass,
 } = Astro.props;
-const header = { tag, heading, body, link };
+const header = { tag, heading, body, link, details };
 ---
 
 <section class:list={["flex flex-col gap-4 md:gap-8 px-4", extraClass]}>
