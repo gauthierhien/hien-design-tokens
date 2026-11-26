@@ -165,8 +165,11 @@ bodies (steps up at `md`/`lg`). Hero `.display` in apps maps to `text-h1`.
 Element selectors (`h1` to `h4`, `p`, `li`, `strong`, `span` = mono label,
 `::selection`) ship in `base.css` (`@layer base`), the article style
 (`prose-custom`) in `prose.css`. Sites import them after Tailwind and keep only
-their own additions. Consuming apps must load fonts themselves
-(`@fontsource-variable/geist` and the mono package).
+their own additions. Fonts: `fonts: geistFonts()` in `astro.config` and
+`<Fonts />` at the top of `<head>` (Astro Fonts API: preload plus a
+metric-matched fallback, so text never jumps from the system font to Geist).
+The files come from the app's `@fontsource-variable/geist` and the mono
+package; do not import those packages in CSS.
 
 ## Layout
 

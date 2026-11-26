@@ -146,3 +146,7 @@ See [DESIGN.md](./DESIGN.md) for machine-readable tokens and brand rationale ([d
 2. Commit, push `main`.
 3. Tag and push: `git tag vX.Y.Z && git push origin vX.Y.Z`
 4. Point apps at the new tag: `pnpm add github:gauthierhien/hien-design-tokens#vX.Y.Z`
+
+## Polices (v1.13.0)
+
+Geist et Geist Mono passent par l'API Fonts d'Astro : `fonts: geistFonts()` (`@hien/design-tokens/fonts`) dans `astro.config`, puis `<Fonts />` (`@hien/design-tokens/Fonts.astro`) en haut du `<head>`. Les fichiers restent dans le site (`@fontsource-variable/geist`, `@fontsource-variable/geist-mono`, sous-ensemble latin). Résultat : préchargement, et une police de secours aux mêmes métriques (Arial, Courier New ajustées), donc plus de saut de la police système vers Geist au chargement. `--font-sans` / `--font-mono` pointent sur `--font-geist` / `--font-geist-mono`. N'importe plus `@fontsource-variable/*` en CSS.

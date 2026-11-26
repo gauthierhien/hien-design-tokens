@@ -1,6 +1,5 @@
 ---
-import "@fontsource-variable/geist";
-import "@fontsource-variable/geist-mono";
+import Fonts from "@hien/design-tokens/Fonts.astro";
 import "../styles.css";
 import pkg from "@hien/design-tokens/package.json";
 import { nav, pages } from "../nav";
@@ -29,6 +28,7 @@ const modes = [
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <Fonts />
     <meta name="viewport" content="width=device-width" />
     <meta name="robots" content="noindex, nofollow" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />

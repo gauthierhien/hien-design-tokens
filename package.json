@@ -1,6 +1,6 @@
 {
   "name": "@hien/design-tokens",
-  "version": "1.12.0",
+  "version": "1.13.0",
   "description": "Brand design tokens and shared Astro components for the hien.design sites",
   "license": "MIT",
   "type": "module",
@@ -49,6 +49,11 @@
       "types": "./components/breakpoints.d.ts",
       "default": "./components/breakpoints.js"
     },
+    "./fonts": {
+      "types": "./components/fonts.d.ts",
+      "default": "./components/fonts.js"
+    },
+    "./Fonts.astro": "./components/Fonts.astro",
     "./NotFound.astro": "./components/NotFound.astro",
     "./PageShell.astro": "./components/PageShell.astro",
     "./CarouselArrows.astro": "./components/CarouselArrows.astro",
