@@ -124,6 +124,12 @@ const { tone = "dark", effect = "rainbow", pose = 0, fixed = false, blackGrain =
     opacity: 0.72;
   }
 
+  /* Page sombre sans survol (mobile, tactile) : couleurs allumées en
+     permanence, voir alwaysColors() dans mesh.ts. */
+  .mesh-bg.mesh-bg.is-mesh-colors.is-dark > .mesh-layer {
+    opacity: 0.72 !important;
+  }
+
   /* Le clair garde sa pleine opacité, actif ou non. */
   .mesh-bg.is-light .mesh-layer {
     opacity: 1 !important;

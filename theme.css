@@ -141,7 +141,7 @@
 :root[data-theme="dark"] {
   color-scheme: dark;
   --background: oklch(0% 0 0);
-  --background-muted: oklch(20.5% 0 0);
+  --background-muted: oklch(17.5% 0 0);
   --foreground: oklch(97% 0 0);
   --foreground-muted: oklch(43.9% 0 0);
   --accent: oklch(0.9402 0.205 113.88);
@@ -154,7 +154,7 @@
   :root[data-theme="auto"] {
     color-scheme: dark;
     --background: oklch(0% 0 0);
-    --background-muted: oklch(20.5% 0 0);
+    --background-muted: oklch(17.5% 0 0);
     --foreground: oklch(97% 0 0);
     --foreground-muted: oklch(43.9% 0 0);
     --accent: oklch(0.9402 0.205 113.88);

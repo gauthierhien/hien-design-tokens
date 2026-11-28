@@ -17,7 +17,7 @@ colors:
   dark-foreground-muted: "oklch(43.9% 0 0)"
   dark-border: "oklch(26.9% 0 0)"
   page-dark-background: "oklch(0% 0 0)"
-  page-dark-background-muted: "oklch(20.5% 0 0)"
+  page-dark-background-muted: "oklch(17.5% 0 0)"
 typography:
   sans:
     fontFamily: Geist Variable
@@ -147,7 +147,7 @@ availability LEDs. Muted foreground handles captions and secondary copy.
 - **Dark mode**: opt-in for the whole page: `<html data-theme="dark">`, or
   `data-theme="auto"` to follow the system. Same palette as `.theme-dark`,
   but the page background is pure black (`oklch(0% 0 0)`) and
-  `background-muted` is `oklch(20.5% 0 0)`. Tailwind's `dark:` variant follows
+  `background-muted` is `oklch(17.5% 0 0)`. Tailwind's `dark:` variant follows
   the same attribute. Sites stay light until they set it.
 
 ## Typography
@@ -227,7 +227,7 @@ script) and the 404 content (`NotFound`) are shared too.
 - **Tag** — Mono uppercase; `foreground` on `background`.
 - **Header**: tagline (mono, top left) and logo (top right). No navigation.
 - **Footer**: `.theme-dark` band on a mesh shader, availability LED line (hidden when unavailable), H2, rounded CTA, credit with Paris time, links between sites (Portfolio, Playground, Indie Apps, CV), then LinkedIn and Mail in a second group, with no extra gap.
-- **Button / Tag / ImageWide / ImageSquare / Section* / Carousel / Lightbox / MeshBackground**: shared Astro components (see README). Sections compose a SectionHeader (tag, heading, body, all optional, plus an optional underlined "Learn more" link to a detail page right after the body, as on apps.hien.design) with images; images carry an optional caption (mono) and link (↗). A wide image section without image or video keeps its frame, empty, on the light grey thumbnail background (confidential project, visual to come). The mesh background is the brand's motion signature, in two tones: dark (black, low-opacity light shapes, grain) and light (page background and accent greyed by a saturation veil, grain). Both turn rainbow only while their trigger is hovered or focused. Alternative, in both tones: `effect="spotlight"`, the same resting mesh and the same rainbow, but the rainbow shows only in a halo that follows the pointer (no trigger; off on mobile and with reduced motion).
+- **Button / Tag / ImageWide / ImageSquare / Section* / Carousel / Lightbox / MeshBackground**: shared Astro components (see README). Sections compose a SectionHeader (tag, heading, body, all optional, plus an optional underlined "Learn more" link to a detail page right after the body, as on apps.hien.design) with images; images carry an optional caption (mono) and link (↗). A wide image section without image or video keeps its frame, empty, on the light grey thumbnail background (confidential project, visual to come). The mesh background is the brand's motion signature, in two tones: dark (black, low-opacity light shapes, grain) and light (page background and accent greyed by a saturation veil, grain). Both turn rainbow only while their trigger is hovered or focused. Exception: the dark tone on a dark page, on a device without hover (phone, touch tablet), stays rainbow all the time, since it would otherwise blend into the page. Alternative, in both tones: `effect="spotlight"`, the same resting mesh and the same rainbow, but the rainbow shows only in a halo that follows the pointer (no trigger; off on mobile and with reduced motion).
 - **Loop videos**: any image slot (Thumbnail, ImageWide, ImageSquare, sections, carousel, lightbox) can take a short MP4 instead. It plays muted, in a loop, inline, in the same frame as the image, which becomes its poster. Loaded near the viewport, paused off-screen; with reduced motion it doesn't autoplay (poster + controls). Keep clips short (a few seconds, under 8 MB).
 - Do not bake page modules (homepage Modules, Skills) into the brand: those stay app patterns.
 

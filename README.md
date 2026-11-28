@@ -158,3 +158,7 @@ Le footer partagé occupe toute la hauteur du viewport (`min-height: 100svh`, la
 ## Surface secondaire sombre (v1.15.0)
 
 En mode sombre (`data-theme`), `background-muted` passe de `oklch(14.5% 0 0)` à `oklch(20.5% 0 0)`, la même valeur que dans `.theme-dark`. Les vignettes, boutons secondaires et flèches de carousel restent discrets sur le fond noir, mais se distinguent enfin. Le mode clair ne change pas.
+
+## Surface sombre ajustée et footer en couleurs (v1.16.0)
+
+En mode sombre, `background-muted` se pose à `oklch(17.5% 0 0)`, entre 14,5 % (invisible) et 20,5 % (trop clair). Sur une page sombre et un appareil sans survol (téléphone, tablette tactile), le `MeshBackground` sombre reste en couleurs en permanence (classe `is-mesh-colors`, posée par `mesh.ts`) : sinon le footer se confond avec la page. Le survol, le desktop et le mode clair ne changent pas.
