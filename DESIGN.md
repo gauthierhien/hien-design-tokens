@@ -17,7 +17,7 @@ colors:
   dark-foreground-muted: "oklch(43.9% 0 0)"
   dark-border: "oklch(26.9% 0 0)"
   page-dark-background: "oklch(0% 0 0)"
-  page-dark-background-muted: "oklch(14.5% 0 0)"
+  page-dark-background-muted: "oklch(20.5% 0 0)"
 typography:
   sans:
     fontFamily: Geist Variable
@@ -147,7 +147,7 @@ availability LEDs. Muted foreground handles captions and secondary copy.
 - **Dark mode**: opt-in for the whole page: `<html data-theme="dark">`, or
   `data-theme="auto"` to follow the system. Same palette as `.theme-dark`,
   but the page background is pure black (`oklch(0% 0 0)`) and
-  `background-muted` is `oklch(14.5% 0 0)`. Tailwind's `dark:` variant follows
+  `background-muted` is `oklch(20.5% 0 0)`. Tailwind's `dark:` variant follows
   the same attribute. Sites stay light until they set it.
 
 ## Typography

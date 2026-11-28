@@ -154,3 +154,7 @@ Geist et Geist Mono passent par l'API Fonts d'Astro : `fonts: geistFonts()` (`@h
 ## Footer plein écran (v1.14.0)
 
 Le footer partagé occupe toute la hauteur du viewport (`min-height: 100svh`, la hauteur avec les barres du navigateur affichées sur iOS, stable au scroll) et centre son contenu verticalement. S'il dépasse le viewport (petit écran, téléphone en paysage, zoom), `PageShell` mesure sa hauteur (`--footer-height`) et décale son ancrage collant : il se révèle par le haut puis défile normalement, rien n'est jamais caché. Sans JavaScript, le comportement d'avant reste en place.
+
+## Surface secondaire sombre (v1.15.0)
+
+En mode sombre (`data-theme`), `background-muted` passe de `oklch(14.5% 0 0)` à `oklch(20.5% 0 0)`, la même valeur que dans `.theme-dark`. Les vignettes, boutons secondaires et flèches de carousel restent discrets sur le fond noir, mais se distinguent enfin. Le mode clair ne change pas.
