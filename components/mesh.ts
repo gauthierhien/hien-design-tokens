@@ -12,6 +12,8 @@ const SPEED = 0.45;
 const FADE_MS = 1100;
 const DESKTOP = mediaUp("md");
 const REDUCED = "(prefers-reduced-motion: reduce)";
+const NO_HOVER = "(hover: none)";
+const SYSTEM_DARK = "(prefers-color-scheme: dark)";
 const STATE_KEY = "__hienMesh";
 
 const BLACK: Rgba = [0, 0, 0, 1];
@@ -22,6 +24,8 @@ type MeshState = {
   onChange: () => void;
   desktop: MediaQueryList;
   reduced: MediaQueryList;
+  noHover: MediaQueryList;
+  systemDark: MediaQueryList;
   cancelFade: () => void;
 };
 
@@ -179,6 +183,25 @@ function easeInOut(t: number) {
   return t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2;
 }
 
+/** Page en mode sombre (data-theme="dark", ou "auto" et système sombre). */
+function darkPage() {
+  const theme = document.documentElement.dataset.theme;
+  if (theme === "dark") return true;
+  return theme === "auto" && window.matchMedia(SYSTEM_DARK).matches;
+}
+
+/**
+ * Mesh sombre sur une page sombre, sans pointeur qui survole (mobile,
+ * tablette tactile) : le fond se confond avec la page et aucun survol ne
+ * peut déclencher les couleurs. Elles restent donc allumées.
+ */
+function alwaysColors(tone: Tone) {
+  if (tone !== "dark" || !darkPage()) return false;
+  return (
+    !window.matchMedia(DESKTOP).matches || window.matchMedia(NO_HOVER).matches
+  );
+}
+
 function desiredSpeed() {
   if (window.matchMedia(REDUCED).matches) return 0;
   if (!window.matchMedia(DESKTOP).matches) return 0;
@@ -198,6 +221,8 @@ function mountOne(host: HTMLElement) {
     prev.abort.abort();
     prev.desktop.removeEventListener("change", prev.onChange);
     prev.reduced.removeEventListener("change", prev.onChange);
+    prev.noHover.removeEventListener("change", prev.onChange);
+    prev.systemDark.removeEventListener("change", prev.onChange);
   }
 
   (host as PaperShaderElement).paperShaderMount?.dispose();
@@ -286,9 +311,10 @@ function mountOne(host: HTMLElement) {
     });
   };
 
+  let pinned = false;
   const go = (on: boolean) => {
     root?.classList.toggle("is-mesh-active", on);
-    const target = on ? 1 : 0;
+    const target = on || pinned ? 1 : 0;
     cancelAnimationFrame(fadeFrame);
     if (window.matchMedia(REDUCED).matches) {
       blend = target;
@@ -331,18 +357,34 @@ function mountOne(host: HTMLElement) {
 
   const desktop = window.matchMedia(DESKTOP);
   const reduced = window.matchMedia(REDUCED);
+  const noHover = window.matchMedia(NO_HOVER);
+  const systemDark = window.matchMedia(SYSTEM_DARK);
+  const pin = () => {
+    if (reveal) return;
+    const next = alwaysColors(tone);
+    bg?.classList.toggle("is-mesh-colors", next);
+    if (next === pinned) return;
+    pinned = next;
+    go(wasActive);
+  };
   const onChange = () => {
     // Le calque révélé repart au prochain mouvement du pointeur.
     mount.setSpeed(reveal ? 0 : desiredSpeed());
     if (reveal) host.closest(".mesh-reveal")?.classList.remove("is-spot");
+    pin();
   };
   desktop.addEventListener("change", onChange);
   reduced.addEventListener("change", onChange);
+  noHover.addEventListener("change", onChange);
+  systemDark.addEventListener("change", onChange);
+  pin();
   holder[STATE_KEY] = {
     abort,
     onChange,
     desktop,
     reduced,
+    noHover,
+    systemDark,
     cancelFade: () => cancelAnimationFrame(fadeFrame),
   };
 }
