@@ -150,3 +150,7 @@ See [DESIGN.md](./DESIGN.md) for machine-readable tokens and brand rationale ([d
 ## Polices (v1.13.0)
 
 Geist et Geist Mono passent par l'API Fonts d'Astro : `fonts: geistFonts()` (`@hien/design-tokens/fonts`) dans `astro.config`, puis `<Fonts />` (`@hien/design-tokens/Fonts.astro`) en haut du `<head>`. Les fichiers restent dans le site (`@fontsource-variable/geist`, `@fontsource-variable/geist-mono`, sous-ensemble latin). Résultat : préchargement, et une police de secours aux mêmes métriques (Arial, Courier New ajustées), donc plus de saut de la police système vers Geist au chargement. `--font-sans` / `--font-mono` pointent sur `--font-geist` / `--font-geist-mono`. N'importe plus `@fontsource-variable/*` en CSS.
+
+## Footer plein écran (v1.14.0)
+
+Le footer partagé occupe toute la hauteur du viewport (`min-height: 100svh`, la hauteur avec les barres du navigateur affichées sur iOS, stable au scroll) et centre son contenu verticalement. S'il dépasse le viewport (petit écran, téléphone en paysage, zoom), `PageShell` mesure sa hauteur (`--footer-height`) et décale son ancrage collant : il se révèle par le haut puis défile normalement, rien n'est jamais caché. Sans JavaScript, le comportement d'avant reste en place.
